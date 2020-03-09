@@ -30,6 +30,7 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
 
     const [addItem, setAddItem] = useState(false);
     const [savePrompt, setSavePrompt] = useState(false);
+    const [chooseDate, setChooseDate] = useState(false);
 
     useEffect(() => {
         // Load Meals
@@ -70,6 +71,7 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
     },[onRetrieveRecipes]);
 
     const recentMealClickHandler = (meal) => {
+        console.log(meal)
         onMealChoice(meal);
     }
 
@@ -87,12 +89,72 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
         onRemoveMeal(item, storedMealChoice);
     }
 
-    const cancelSavePromptHandler = () => {
+    const startSavePrompt = (item) => {
+        setSavePrompt(true);
+        console.log(item)
+    }
+
+    const cancelPromptHandler = () => {
         setSavePrompt(false);
     }
 
+    const cancelSavePromptHandler = () => {
+        setSavePrompt(false);
+
+    }
+
     const continueSavePromptHandler = () => {
-        console.log(storedMealChoice);
+        console.log(storedMealChoice.meal.id);
+        console.log(storedMealChoice.meal)
+        const saveID = storedMealChoice.meal.id;
+        const saveChoice = {
+            meals: storedMealChoice.meal.meals,
+            nutrientTotals: storedMealChoice.meal.nutrientTotals
+        }
+        console.log(saveChoice)
+
+        axios.put('https://react-food-app-3532b.firebaseio.com/meal-items/' + saveID + '.json', saveChoice)
+        .then(response => { 
+            console.log(response)
+            setSavePrompt(false);
+        })
+        .catch(error => {
+            //this.setState({error: true});
+        });
+    }
+
+    const addNewDateHandler = () => {
+        console.log("NEW")
+        const newMeal = {
+            meals: [],
+            nutrientTotals: {
+                calcium: 0,
+                calories: 0,
+                carbs: 0,
+                cholesterol: 0,
+                fat: 0,
+                fiber: 0,
+                iron: 0,
+                monoFat: 0,
+                polyFat: 0,
+                potassium: 0,
+                protein: 0,
+                saturatedFat: 0,
+                sodium: 0,
+                sugars: 0,
+                transFat: 0,
+                vitaminA: 0,
+                vitaminC: 0
+            },
+            id: '03-08-2020'
+        }
+        //onMealChoice(newMeal);
+
+        setChooseDate(true);
+    };
+
+    const chooseDateCancelHandler = () => {
+        setChooseDate(false);
     }
 
     const foodAndRecipes = [...storedFood, ...storedRecipes];
@@ -108,24 +170,40 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
                     <center>Save Meal?</center>
                     <div>
                         <center>
-                            <button onClick={cancelSavePromptHandler}> Cancel</button>
+                            <button onClick={cancelPromptHandler}> Cancel</button>
+                            <button onClick={cancelSavePromptHandler}> Don't Save</button>
                             <button onClick={continueSavePromptHandler}> Save</button>
                         </center>   
                     </div>
                 </div>
             </Modal>
+
+            <Modal show={chooseDate} modalClosed={chooseDateCancelHandler}>
+                
+            </Modal>
+
             {/* <ItemDiv padding={'0.8em'}>
                 Recent Meals
                 <hr />
                 <RecentMeals items={storedMeals} clicked={meal => recentMealClickHandler(meal)}/>
             </ItemDiv> */}
+
             <ItemDiv>
                 Recent Meals
-                <RecentSlideList items={storedMeals} mealChoice={storedMealChoice} promptSave={() => {setSavePrompt(true)}} clicked={meal => recentMealClickHandler(meal)}/>
+                <RecentSlideList 
+                    items={storedMeals} 
+                    mealChoice={storedMealChoice} 
+                    promptSave={item => startSavePrompt(item)} 
+                    clicked={meal => recentMealClickHandler(meal)}
+                    addNewDate={() => addNewDateHandler()}/>
             </ItemDiv>
+
             <ItemDiv padding={'0.8em'}>
                 {mealChoiceTitle}
-                <SingleDayMeals mealChoice={storedMealChoice} addItemHandler={addItemHandler} deleteItemHandler={item => deleteItemChoiceHandler(item)}/>
+                <SingleDayMeals 
+                    mealChoice={storedMealChoice} 
+                    addItemHandler={addItemHandler} 
+                    deleteItemHandler={item => deleteItemChoiceHandler(item)}/>
             </ItemDiv>
             
 

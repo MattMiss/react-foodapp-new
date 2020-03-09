@@ -1,15 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios-food';
 import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
+import Modal from '../../components/UI/Modal/Modal';
+import FoodCreator from '../../components/FoodRecipes/Creators/FoodCreator/FoodCreator';
+import ChooseItem from '../../components/FoodRecipes/Creators/ChooseItem';
+import styled from 'styled-components';
 import * as actionTypes from '../../store/actions';
 
 
+const ItemDiv = styled.div`
+    margin: 1em auto;
+    width: 50%;
+    height: 80px;  
+    min-width: 300px;
+    text-align: center;
+    padding: 1em;
+
+`;
+
+const AddBtn = styled.button`
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #00a5ff;
+    border: 2px solid #00a5ff;
+
+    &:hover {
+        background-color: #182955;
+        color: #00a5ff;
+        cursor: pointer;
+    }
+
+`;
 
 const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) => {
 
-
-    //const [foodItems, setFoodItems] = useState([]);
+    const [newFoodRecipe, setNewFoodRecipe] = useState(false);
+    const [chooseItem, setChooseItem] = useState(false);
+    const [showFoodCreator, setShowFoodCreator] = useState(false);
+    const [showRecipeCreator, setShowRecipeCreator] = useState(false);
 
     useEffect(() => {
         axios.get('https://react-food-app-3532b.firebaseio.com/food-items.json')
@@ -35,10 +66,51 @@ const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) =>
         console.log('clicked', item);
     };
 
-    const foodAndRecipes = [...storedFood, ...storedRecipes];
+    const newFoodRecipeHandler = () => {
+        setNewFoodRecipe(true);
+        setChooseItem(true);
+    };
+
+    const cancelNewFoodRecipe = () => {
+        setNewFoodRecipe(false);
+        setShowFoodCreator(false);
+        setShowRecipeCreator(false);
+
+    };
+
+    const handleSubmit = () => {
+        
+    };
+
+    const foodOrRecipeChosen = (item) => {
+        //console.log(item);
+        if(item === 'food'){
+            setShowFoodCreator(true);
+        }else {
+            setShowRecipeCreator(true);
+        }
+        setChooseItem(false);
+
+    }
+    const backHandler = () => {
+        setChooseItem(true);
+        setShowFoodCreator(false);
+        setShowRecipeCreator(false);
+    };
+
+    const foodAndRecipes = [...storedFood, ...storedRecipes]; 
+
+    
 
     return (
         <div>
+            <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
+                <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
+                <FoodCreator show={showFoodCreator} backHandler={backHandler} />
+            </Modal>
+            <ItemDiv>
+                <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>
+            </ItemDiv>
             <ItemList items={foodAndRecipes} clicked={item => foodRecipeClicked(item)}/>
             {/* <AddItemDiv 
                 showFood = {() => this.showFoodCreatorHandler()}

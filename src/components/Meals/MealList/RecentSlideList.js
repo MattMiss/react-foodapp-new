@@ -113,11 +113,16 @@ const RecentSlideList = (props) => {
 
     const clickedHandler = (item) => {
         //console.log("clicked", item)
-        if(!props.mealChoice.editing){
-            props.clicked(item);
-        }else{
-            props.promptSave();
+        if(item === 'new'){
+            props.addNewDate();
+        }else {
+            if(!props.mealChoice.editing){
+                props.clicked(item);
+            }else{
+                props.promptSave(item);
+            }
         }
+        
         
     }
 
@@ -173,7 +178,15 @@ const RecentSlideList = (props) => {
                 
                 </Card>
             )
-        })}
+            })}
+            <Card
+                key={'AddNEw'}
+                onClick={() => clickedHandler('new')}
+                style={{
+                    ...styleTurn
+                }}>
+                Add New       
+            </Card>
         </CardContainer>
     );
 };
