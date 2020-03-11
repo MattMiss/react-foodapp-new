@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 
-
 import Modal from '../../../UI/Modal/Modal';
+import ModalInner from '../../../UI/Modal/ModalInner';
 //import FoodSummary from '../FoodSummary/FoodSummary';
 import ServingCreator from './Servings/ServingCreator/ServingCreator';
 import Servings from './Servings/Servings';
@@ -11,12 +11,22 @@ import styled from 'styled-components';
 
 const FoodContainer = styled.div`
     margin: 20px auto;
-    padding: 10px 10px 20px 10px;
-    width: 95%;
     font-size: 12px;
-    border: 1px 1px #eee;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    max-width: 800px;
+`;
+
+const AddServingDiv = styled.div`
+    text-align: center;
+    font-size: 1.2em;
+    background-color: #00a5ff;
+    color: white;
+    margin-top: 10px;
+    border-radius: 3px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #182955;
+        color: #00a5ff;
+    }
 `;
 
 
@@ -78,7 +88,7 @@ class FoodCreator extends Component {
         }],
         currentServing: null,
         servingError: false
-    }
+    } 
 
 
     handleSubmit = (event) => {
@@ -165,12 +175,16 @@ class FoodCreator extends Component {
                 "vitamin-c" : serving.vitaminC
             }           
         }
+        console.log(newServing)
+        // //Add new serving to old servings array
+        // const allServings = [...this.state.servings, newServing]
 
-        //Add new serving to old servings array
-        const allServings = [...this.state.servings, newServing]
-
-        this.setState({servings: allServings, addServing: false})
+        // this.setState({servings: allServings, addServing: false})
     }; 
+
+    servingCancelHandler = () => {
+        this.setState({addServing: false});
+    }
 
     servingErrorHandler = () => {
         this.setState({servingError: true})
@@ -198,7 +212,7 @@ class FoodCreator extends Component {
         </div> : null;
 
 
-        const brandContainer = this.state.showBrand ? <div className={"row"} id="brandNameContainer">
+        const brandContainer = this.state.showBrand ? <div className="row" id="brandNameContainer">
             <div className={"col-sm-6"}>
 
             </div>
@@ -213,58 +227,62 @@ class FoodCreator extends Component {
         </div> : null
 
 
-        const servingsContainer = true ? <Servings servings={this.state.servings} /> : null
+        const servingsContainer = this.state.servings.length > 0 ? <Servings servings={this.state.servings} /> : null
 
         
         // only show the creator is props.show is true
         const foodCreator = this.props.show ? <FoodContainer>
         
         <form onSubmit={this.handleSubmit}>
-            <div className="form-group row align-items-center"> 
-                <label htmlFor="foodName" className="form-label col-sm-2">Food Name</label>
-                <div className="col-sm-4">
-                    <input type="text" className="form-control" id="foodName"/> 
+            <div className="container">
+                <div className="form-group row align-items-center"> 
+                    <label htmlFor="foodName" className="form-label col-sm-2">Food Name</label>
+                    <div className="col-sm-4">
+                        <input type="text" className="form-control" id="foodName"/> 
+                    </div>
+                    <div className={"col-sm-6"}>
+                        <div className={"row align-items-center"}>
+                            <label htmlFor="type" className="form-label col-sm-4">Type</label> 
+                            <div className="btn-group btn-group-toggle col-sm-8" data-toggle="buttons">
+                                <label className="btn btn-sm btn-primary active">
+                                    <input type="radio" name="type" value="generic" defaultChecked onClick={() => this.brandHandler('generic')}/> Generic 
+                                </label>
+                                <label className="btn btn-sm btn-primary">
+                                    <input type="radio" name="type" value="brand" onClick={() => this.brandHandler('brand')}/> Brand 
+                                </label>
+                            </div>
+                        </div> 
+                    </div>  
                 </div>
-                <div className={"col-sm-6"}>
-                    <div className={"row align-items-center"}>
-                        <label htmlFor="type" className="form-label col-sm-4">Type</label> 
-                        <div className="btn-group btn-group-toggle col-sm-8" data-toggle="buttons">
-                            <label className="btn btn-primary active">
-                                <input type="radio" name="type" value="generic" defaultChecked onClick={() => this.brandHandler('generic')}/> Generic 
-                            </label>
-                            <label className="btn btn-primary">
-                                <input type="radio" name="type" value="brand" onClick={() => this.brandHandler('brand')}/> Brand 
-                            </label>
-                        </div>
-                    </div> 
-                </div>  
-            </div>
-            {brandContainer}  
+                {brandContainer}  
 
-            <hr />
-            <div>
-                <h5>Servings</h5>
-            </div>
-            
-            {servingsContainer}
-            <ServingCreator show={this.state.addServing} saveServingHandler={serving => this.saveServingHandler(serving)} errorHandler={this.servingErrorHandler}/>
+                <hr />
+                <div>
+                    <center><h5>Servings</h5></center>
+                </div>
+                
+                {servingsContainer}
 
+                <div className="row">
+                    <div className="col">
+                        <AddServingDiv onClick={this.servingHandler}>
+                            {!this.state.addServing ? 'Add Serving' : 'Cancel'}
+                        </AddServingDiv>
+                    </div>
+                </div>
+                
             
-            {/* <div className={classes.AddSrvText}> */}
-            <div>
-                <span onClick={this.servingHandler}>{!this.state.addServing ? 'Add Serving' : 'Cancel'}</span>
-            </div>
-        
-            <hr />
+                <hr />
 
-            <div className=" row align-items-center my-2">   
-                <label htmlFor="notes" className="form-label col">Notes</label> 
+                <div className=" row align-items-center my-2">   
+                    <label htmlFor="notes" className="form-label col">Notes</label> 
+                </div>
+                <div className=" row-8 align-items-center my-2"> 
+                    <textarea type="text" className="form-control" id="notes" rows="4"></textarea> 
+                </div>
+                
+                <button className="btn btn-sm btn-block btn-success" type='submit'>Save Food</button>
             </div>
-            <div className=" row-8 align-items-center my-2"> 
-                <textarea type="text" className="form-control" id="notes" rows="4"></textarea> 
-            </div>
-            
-            <button className="btn btn-sm btn-block btn-success" type='submit'>Save Food</button>
         </form>
         
     </FoodContainer> : null;
@@ -276,6 +294,9 @@ class FoodCreator extends Component {
                 <Modal show={this.state.saving} modalClosed={this.foodSaveCancelHandler}>
                     {foodSummary}
                 </Modal>
+                <ModalInner show={this.state.addServing} modalClosed={this.servingCancelHandler}>
+                    <ServingCreator show={this.state.addServing} saveServingHandler={serving => this.saveServingHandler(serving)} errorHandler={this.servingErrorHandler}/>
+                </ModalInner>
                 <Modal show={this.state.servingError} modalClosed={this.servingErrorCancelHandler}>
                     <p>Error</p>
                 </Modal>

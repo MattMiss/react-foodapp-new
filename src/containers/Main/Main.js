@@ -4,6 +4,7 @@ import axios from '../../axios-food';
 import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
 import Modal from '../../components/UI/Modal/Modal';
 import FoodCreator from '../../components/FoodRecipes/Creators/FoodCreator/FoodCreator';
+import RecipeCreator from '../../components/FoodRecipes/Creators/RecipeCreator/RecipeCreator';
 import ChooseItem from '../../components/FoodRecipes/Creators/ChooseItem';
 import styled from 'styled-components';
 import * as actionTypes from '../../store/actions';
@@ -26,6 +27,7 @@ const AddBtn = styled.button`
     text-align: center;
     color: #00a5ff;
     border: 2px solid #00a5ff;
+    border-radius: 3px;
 
     &:hover {
         background-color: #182955;
@@ -107,6 +109,7 @@ const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) =>
             <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
                 <FoodCreator show={showFoodCreator} backHandler={backHandler} />
+                <RecipeCreator show={showRecipeCreator} backHandler={backHandler} />
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>

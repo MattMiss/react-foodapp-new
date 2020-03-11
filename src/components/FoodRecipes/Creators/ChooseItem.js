@@ -7,9 +7,11 @@ const FoodRecipeDiv = styled.div`
     width: 80%;
     height: 100px;
     background-color: #00a5ff;
+    border-radius: 4px;
     text-align: center;
     padding: .5em;
     vertical-align: middle;
+    font-size: 1.3em;
     line-height: 80px;
     margin: 1em auto;
     color: white;

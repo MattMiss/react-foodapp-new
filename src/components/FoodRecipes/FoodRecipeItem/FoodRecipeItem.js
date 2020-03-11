@@ -29,8 +29,22 @@ const BoldLabel = styled.span`
     font-weight: bold;
 `;
 
+const NutCollapseTrigger = styled.div`
+    text-align: center;
+
+    &:hover {
+        background-color: #4682c0;
+        color: white;
+    }
+
+    &.recipe:hover {
+        background-color: #b95673;
+        color: white;
+    }
+`;
+
 const NutrientCol = (props) => (
-    <React.Fragment>
+    <>
         <Col className="px-1 text-right">
             <BoldLabel>
                 {props.label} 
@@ -39,7 +53,7 @@ const NutrientCol = (props) => (
         <Col className="px-1 text-left">
             {props.val} 
         </Col>
-    </React.Fragment>
+    </>
 );
 
 const NutrientRow = (props) => {
@@ -95,6 +109,10 @@ const FoodRecipeItem = (props) => {
         {label: "Vitamin C", val: nutrients.vitaminC}
     ];
 
+    const nutrientTrigger = <NutCollapseTrigger className={props.item.type}>
+        Nutrients
+    </NutCollapseTrigger>;
+
     //console.log(props.item)
     return (
         <ItemDiv className={props.item.type} onClick={item => props.clicked(item)}>
@@ -124,7 +142,7 @@ const FoodRecipeItem = (props) => {
                                               
                     </Row>
                 </Container>
-                <Collapsible trigger="Nutrients">
+                <Collapsible trigger={nutrientTrigger}>
                     <NutrientContainer>
                         <NutrientRow items={row1} />
                         <NutrientRow items={row2} />

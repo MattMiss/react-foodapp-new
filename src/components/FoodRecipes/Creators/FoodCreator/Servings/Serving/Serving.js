@@ -1,17 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Row, Col } from 'react-bootstrap';
+
 
 const Label = styled.span`
     font-weight: 700;
     font-size: .8rem;
 `;
 
-const DarkerRow = styled.div`
+const DarkerRow = styled(Row)`
     background-color: #d0e0e9;
     margin: 0;
 `;
 
-const LighterRow = styled.div`
+const LighterRow = styled(Row)`
     margin: 0;
 `;
 
@@ -27,149 +29,202 @@ const serving = (props) => {
     //console.log(props)
     return(
         <ServingsDiv>
-            <DarkerRow className={"row "}> 
-                <div className="col">
-                    <div className="row">
-                        <div className="col">
-                            <Label >Calories:</Label> <SmallSpan>{props.serving.nutrients.calories}</SmallSpan>
-                        </div>
-                    </div>    
-                </div>
+            <DarkerRow> 
+                <Col>
+                    <Label >Calories</Label> <SmallSpan>{props.serving.nutrients.calories}</SmallSpan>
+                </Col>
             </DarkerRow>
             
-            <LighterRow className={"row " }>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label>Total Fat: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.fat}g</SmallSpan>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Saturated Fat: </Label> 
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.saturatedFat}g</SmallSpan>   
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label> Poly Fat: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.polyFat}g</SmallSpan>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Mono Fat: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.monoFat}g</SmallSpan>
-                    </div>
-                </div>
+            <LighterRow>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label>Total Fat</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.fat}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label>Sat Fat</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.saturatedFat}g</SmallSpan>   
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label>Poly Fat</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.polyFat}g</SmallSpan>  
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Mono Fat</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.monoFat}g</SmallSpan>  
+                        </Col>
+                    </Row>
+                </Col>
             </LighterRow>
 
-            <DarkerRow className={"row " }>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Cholesterol: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.cholesterol}mg</SmallSpan>
-                    </div>
-                   
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Sodium: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.sodium}g</SmallSpan>
-                    </div>
-                    
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Potassium: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.potassium}mg</SmallSpan>
-                    </div>  
-                </div>
+            <DarkerRow>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Choles</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.cholesterol}mg</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Sodium</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.sodium}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Potass</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.potassium}mg</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
             </DarkerRow>
             
-            <LighterRow className={"row " }>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Total Carbs: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.carbs}g</SmallSpan>
-                    </div>   
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Fiber: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.fiber}g</SmallSpan>
-                    </div>  
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Sugars: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.sugars}g</SmallSpan>
-                    </div>   
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Protein: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.protein}g</SmallSpan>
-                    </div> 
-                </div>
+            <LighterRow>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Carbs</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.carbs}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Fiber</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.fiber}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Sugars</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.sugars}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Protein</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.protein}g</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
             </LighterRow>
 
-            <DarkerRow className={"row "}>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Vitamin A: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.vitaminA}%</SmallSpan>
-                    </div> 
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Vitamin C: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.vitaminC}%</SmallSpan>
-                    </div>  
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Calcium: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.calcium}%</SmallSpan>
-                    </div>  
-                </div>
-                <div className="col">
-                    <div className="row justify-content-center">
-                        <Label >Iron: </Label>
-                    </div>
-                    <div className="row justify-content-center">
-                        <SmallSpan>{props.serving.nutrients.iron}%</SmallSpan>
-                    </div>
-                    
-                </div>
+            <DarkerRow>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Vit A</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.vitaminA}%</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Vit C</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.vitaminC}%</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Calcium</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.calcium}%</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className="px-1">
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <Label >Iron</Label>
+                        </Col>
+                    </Row>
+                    <Row className="no-gutters">
+                        <Col className="px-0">
+                            <SmallSpan>{props.serving.nutrients.iron}%</SmallSpan>
+                        </Col>
+                    </Row>
+                </Col>
             </DarkerRow>
 
         </ServingsDiv>     
