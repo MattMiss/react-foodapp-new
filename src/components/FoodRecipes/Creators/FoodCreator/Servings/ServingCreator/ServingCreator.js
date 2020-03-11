@@ -10,7 +10,7 @@ import { Row, Col, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 // `;
 
 
-const ServingCreator = (props) => {
+const ServingCreator = React.memo((props) => {
  
     // const [fields, setFields] = useState({
     //         servingSize: "-1",
@@ -239,6 +239,6 @@ const ServingCreator = (props) => {
             </Row>
         </div> : null  
     )         
-};
+});
 
 export default ServingCreator;

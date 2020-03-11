@@ -37,7 +37,7 @@ const AddBtn = styled.button`
 
 `;
 
-const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) => {
+const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) => {
 
     const [newFoodRecipe, setNewFoodRecipe] = useState(false);
     const [chooseItem, setChooseItem] = useState(false);
@@ -102,7 +102,10 @@ const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) =>
 
     const foodAndRecipes = [...storedFood, ...storedRecipes]; 
 
-    
+    const ModalAdded = (props) => {
+        console.log("Modal added in " + props.name);
+        return null;
+    }
 
     return (
         <div>
@@ -110,6 +113,7 @@ const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) =>
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
                 <FoodCreator show={showFoodCreator} backHandler={backHandler} />
                 <RecipeCreator show={showRecipeCreator} backHandler={backHandler} />
+                <ModalAdded name="Food/Recipe Creator Modal Added in [Main.js]"/>
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>
@@ -125,7 +129,7 @@ const Main = ({storedFood, storedRecipes, onRetrieveFood, onRetrieveRecipes}) =>
         </div>
     );
     
-}
+})
 
 const mapStateToProps = state => {
     return {

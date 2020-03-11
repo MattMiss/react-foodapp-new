@@ -1,29 +1,52 @@
 import React, { Fragment } from 'react';
 import NavigationItems from '../NavigationItems/NavigationItems';
-import classes from './SideDrawer.module.css';
 import BackDrop from '../../UI/Backdrop/Backdrop';
+import styled from 'styled-components';
+
+const SideDrawerDiv = styled.div`
+    position: fixed;
+    width: 280px;
+    max-width: 70%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    background-color: white;
+    padding: 32px 16px;
+    box-sizing: border-box;
+    transition: transform 0.3 ease-out;
+
+    &.Open {
+        transform: translateX(0);
+    }
+
+    &.Closed {
+        transform: translateX(-100%);
+    }
+
+    @media (min-width: 500px) {
+        visibility: none;
+    }
+`;
 
 
 const sideDrawer = (props) => {
 
-    let attachedClasses = [classes.SideDrawer, classes.Close]
+    let attachedClass = "Closed";
 
     if (props.open){
-        attachedClasses = [classes.SideDrawer, classes.Open]
+        attachedClass = "Open";
     }
 
     return (
-        <Fragment>
+        <>
             <BackDrop show={props.open} clicked={props.closed} />
-            <div className={attachedClasses.join(' ')} >
-            
-            <nav>
-                <NavigationItems />
-            </nav>
-        </div>
-        </Fragment>
-        
-        
+            <SideDrawerDiv className={attachedClass} >
+                <nav>
+                    <NavigationItems close={props.closed} />
+                </nav>
+            </SideDrawerDiv>
+        </>   
     );
 };
 

@@ -1,17 +1,38 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
-import classes from './NavigationItem.module.css';
+const NavigationItemLi = styled.li`
+    margin: 10px 0;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+
+    &:hover {
+        background-color: red;
+    }
+
+    @media (min-width: 500px) {
+        margin: 0;
+        display: flex;
+        height: 100%;
+        width: auto;
+        align-items: center;
+    }
+`;
+
+
 
 const navigationItem = (props) => (
-    <li className={classes.NavigationItem}>
+    <NavigationItemLi>
         <NavLink 
             to={props.link}
             exact = {props.exact}
-            activeClassName={classes.Active}>
+            onClick={props.clicked}>
             {props.children}
+            
         </NavLink>
-    </li>
+    </NavigationItemLi>
 );
 
 export default navigationItem;

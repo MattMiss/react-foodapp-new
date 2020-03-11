@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios-food';
-import RecentMeals from '../../components/Meals/MealList/RecentMeals';
+//import RecentMeals from '../../components/Meals/MealList/RecentMeals';
 import RecentSlideList from '../../components/Meals/MealList/RecentSlideList';
 import SingleDayMeals from '../../components/Meals/SingleDayMeals/SingleDayMeals';
 import Modal from '../../components/UI/Modal/Modal';
@@ -30,7 +30,7 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
 
     const [addItem, setAddItem] = useState(false);
     const [savePrompt, setSavePrompt] = useState(false);
-    const [chooseDate, setChooseDate] = useState(false);
+    //const [chooseDate, setChooseDate] = useState(false);
 
     useEffect(() => {
         // Load Meals
@@ -125,36 +125,41 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
 
     const addNewDateHandler = () => {
         console.log("NEW")
-        const newMeal = {
-            meals: [],
-            nutrientTotals: {
-                calcium: 0,
-                calories: 0,
-                carbs: 0,
-                cholesterol: 0,
-                fat: 0,
-                fiber: 0,
-                iron: 0,
-                monoFat: 0,
-                polyFat: 0,
-                potassium: 0,
-                protein: 0,
-                saturatedFat: 0,
-                sodium: 0,
-                sugars: 0,
-                transFat: 0,
-                vitaminA: 0,
-                vitaminC: 0
-            },
-            id: '03-08-2020'
-        }
+        // const newMeal = {
+        //     meals: [],
+        //     nutrientTotals: {
+        //         calcium: 0,
+        //         calories: 0,
+        //         carbs: 0,
+        //         cholesterol: 0,
+        //         fat: 0,
+        //         fiber: 0,
+        //         iron: 0,
+        //         monoFat: 0,
+        //         polyFat: 0,
+        //         potassium: 0,
+        //         protein: 0,
+        //         saturatedFat: 0,
+        //         sodium: 0,
+        //         sugars: 0,
+        //         transFat: 0,
+        //         vitaminA: 0,
+        //         vitaminC: 0
+        //     },
+        //     id: '03-08-2020'
+        // }
         //onMealChoice(newMeal);
-
-        setChooseDate(true);
+        //
+        // setChooseDate(true);
     };
 
-    const chooseDateCancelHandler = () => {
-        setChooseDate(false);
+    // const chooseDateCancelHandler = () => {
+    //     setChooseDate(false);
+    // }
+
+    const ModalAdded = (props) => {
+        console.log("Modal added in " + props.name);
+        return null;
     }
 
     const foodAndRecipes = [...storedFood, ...storedRecipes];
@@ -164,6 +169,7 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
         <div>
             <Modal show={addItem} modalClosed={addItemHandler}>
                 <ItemList items={foodAndRecipes} clicked={item => addItemChoiceHandler(item)}/>
+                <ModalAdded name="Item List Modal added in [Meals.js]"/>
             </Modal>
             <Modal show={savePrompt} modalClosed={cancelSavePromptHandler}>
                 <div>
@@ -176,11 +182,12 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
                         </center>   
                     </div>
                 </div>
+                <ModalAdded name="Save Prompt Modal added in [Meals].js]"/>
             </Modal>
 
-            <Modal show={chooseDate} modalClosed={chooseDateCancelHandler}>
+            {/* <Modal show={chooseDate} modalClosed={chooseDateCancelHandler}>
                 
-            </Modal>
+            </Modal> */}
 
             {/* <ItemDiv padding={'0.8em'}>
                 Recent Meals

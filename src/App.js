@@ -5,12 +5,16 @@ import { Route, Switch } from 'react-router-dom';
 import Main from './containers/Main/Main';
 import Meals from './containers/Meals/Meals';
 import Layout from './hoc/Layout/Layout';
-import classes from './App.css';
+import styled from 'styled-components';
+
+const AppDiv = styled.div`
+  text-align: center;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div className={classes.App}>
+      <AppDiv>
         <Layout>
           <Switch>
             <Route path="/meals" component={Meals} />
@@ -18,7 +22,7 @@ class App extends Component {
             
           </Switch> 
         </Layout> 
-      </div>
+      </AppDiv>
     );
   }
 }

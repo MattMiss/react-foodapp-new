@@ -1,4 +1,4 @@
-import React,{Component, Fragment} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Backdrop from '../Backdrop/Backdrop';
 
@@ -18,26 +18,20 @@ const Modal = styled.div`
     overflow-y: auto;
 `;
 
-class ModalInner extends Component {
+const ModalInner = (props) => {
 
-    shouldComponentUpdate(nextProps, nextState){
-        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
-    }
-
-    render() {
-        return (
-            <Fragment>
-                <Backdrop show={this.props.show} clicked={this.props.modalClosed}/>
-                <Modal
-                    style = {{
-                        transform: this.props.show ? 'translateY(0)' : 'translateY(-100vh)',
-                        opacity: this.props.show ? '1' : '0'
-                    }}>
-                    {this.props.children}
-                </Modal>
-            </Fragment>
-        );
-    }
+    return (
+        <>
+            <Backdrop show={props.show} clicked={props.modalClosed}/>
+            <Modal
+                style = {{
+                    transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+                    opacity: props.show ? '1' : '0'
+                }}>
+                {props.children}
+            </Modal>
+        </>
+    );   
 }
 
 export default ModalInner;

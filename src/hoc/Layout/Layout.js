@@ -1,8 +1,11 @@
 import React, {Component, Fragment} from 'react';
-
-import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
+import styled from 'styled-components';
+
+const MainContent = styled.main`
+    margin-top: 72px;
+`;
 
 class Layout extends Component {
     state = {
@@ -25,9 +28,9 @@ class Layout extends Component {
             <Fragment>
                 <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler}/>
                 <SideDrawer open = {this.state.showSideDrawer} closed={this.sideDrawerClosedHandler} />
-                <main className = {classes.Content}>
+                <MainContent>
                     {this.props.children}
-                </main>
+                </MainContent>
             </Fragment>
         )
     };       
