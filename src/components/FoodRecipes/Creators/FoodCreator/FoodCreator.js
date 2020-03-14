@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import Modal from '../../../UI/Modal/Modal';
 import ModalInner from '../../../UI/Modal/ModalInner';
@@ -29,128 +29,181 @@ const AddServingDiv = styled.div`
     }
 `;
 
+const testServings = [{
+    servingSize: "123",
+    servingSizeDesc: "ty",
+    metricSize: "12",
+    metricSizeDesc: "g",
+    nutrients: {
+        calcium: "786",
+        calories: "123",
+        carbs: "954",
+        cholesterol: "1567",
+        fat: "774",
+        fiber: "28",
+        iron: "26",
+        monoFat: "945",
+        polyFat: "14",
+        potassium: "346",
+        protein: "865",
+        saturatedFat: "234",
+        sodium: "563",
+        sugars: "346",
+        vitaminA: "2457",
+        vitaminC: "457",
+    }
+},
+{
+    servingSize: "5637",
+    servingSizeDesc: "df",
+    metricSize: "3",
+    metricSizeDesc: "g",
+    nutrients: {
+        calcium: "678",
+        calories: "3567",
+        carbs: "5368",
+        cholesterol: "857",
+        fat: "568",
+        fiber: "4654",
+        iron: "234",
+        monoFat: "64",
+        polyFat: "12",
+        potassium: "6",
+        protein: "568",
+        saturatedFat: "978",
+        sodium: "89",
+        sugars: "687",
+        vitaminA: "564",
+        vitaminC: "47",
+    }
+}];
 
-class FoodCreator extends Component {
+const FoodCreator = (props) => {
     
-    state = {
-        currentFood: null,
-        saving: false,
-        continue: false,
-        addServing: false,
-        showBrand: false,
-        servings: [{
-            servingSize: "123",
-            servingSizeDesc: "ty",
-            metricSize: "12",
-            metricSizeDesc: "g",
-            nutrients: {
-                calcium: "786",
-                calories: "123",
-                carbs: "954",
-                cholesterol: "1567",
-                fat: "774",
-                fiber: "28",
-                iron: "26",
-                monoFat: "945",
-                polyFat: "14",
-                potassium: "346",
-                protein: "865",
-                saturatedFat: "234",
-                sodium: "563",
-                sugars: "346",
-                vitaminA: "2457",
-                vitaminC: "457",
-            }
-        },
-        {
-            servingSize: "5637",
-            servingSizeDesc: "df",
-            metricSize: "3",
-            metricSizeDesc: "g",
-            nutrients: {
-                calcium: "678",
-                calories: "3567",
-                carbs: "5368",
-                cholesterol: "857",
-                fat: "568",
-                fiber: "4654",
-                iron: "234",
-                monoFat: "64",
-                polyFat: "12",
-                potassium: "6",
-                protein: "568",
-                saturatedFat: "978",
-                sodium: "89",
-                sugars: "687",
-                vitaminA: "564",
-                vitaminC: "47",
-            }
-        }],
-        currentServing: null,
-        servingError: false
-    } 
+    const [currentFood, setCurrentFood] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [addServing, setAddServing] = useState(false);
+    const [showBrand, setShowBrand] = useState(false);
+    const [servings, setServings] = useState(testServings);
+    const [currentServing, setCurrentServing] = useState(null);
+    const [servingError, setServingError] = useState(null);
+    const [error, setError] = useState(null);
 
 
-    handleSubmit = (event) => {
+    // state = {
+    //     currentFood: null,
+    //     saving: false,
+    //     addServing: false,
+    //     showBrand: false,
+        // servings: [{
+        //     servingSize: "123",
+        //     servingSizeDesc: "ty",
+        //     metricSize: "12",
+        //     metricSizeDesc: "g",
+        //     nutrients: {
+        //         calcium: "786",
+        //         calories: "123",
+        //         carbs: "954",
+        //         cholesterol: "1567",
+        //         fat: "774",
+        //         fiber: "28",
+        //         iron: "26",
+        //         monoFat: "945",
+        //         polyFat: "14",
+        //         potassium: "346",
+        //         protein: "865",
+        //         saturatedFat: "234",
+        //         sodium: "563",
+        //         sugars: "346",
+        //         vitaminA: "2457",
+        //         vitaminC: "457",
+        //     }
+        // },
+        // {
+        //     servingSize: "5637",
+        //     servingSizeDesc: "df",
+        //     metricSize: "3",
+        //     metricSizeDesc: "g",
+        //     nutrients: {
+        //         calcium: "678",
+        //         calories: "3567",
+        //         carbs: "5368",
+        //         cholesterol: "857",
+        //         fat: "568",
+        //         fiber: "4654",
+        //         iron: "234",
+        //         monoFat: "64",
+        //         polyFat: "12",
+        //         potassium: "6",
+        //         protein: "568",
+        //         saturatedFat: "978",
+        //         sodium: "89",
+        //         sugars: "687",
+        //         vitaminA: "564",
+        //         vitaminC: "47",
+        //     }
+        // }],
+    //     currentServing: null,
+    //     servingError: false
+    // } 
+
+
+    const handleSubmit = (event) => {
         event.preventDefault(); 
 
         const food = {
             name : event.target.foodName.value,
             type : event.target.type.value,
-            servings : this.state.servings          
+            servings : servings          
         }
         if (event.target.type.value === 'brand'){
             food.brand = event.target.brandName.value;
         }
 
-        console.log(food)
-
-        this.setState({saving: true, currentFood: food});    
+        setSaving(true); 
+        setAddServing(false);
+        setCurrentFood(food);   
     }
 
-    foodSaveContinueHandler = () => {
-        this.setState({loading: true});
+    const foodSaveContinueHandler = () => {
+        setLoading(true);
 
-        axios.post('/food-items.json', this.state.currentFood)
+        axios.post('/food-items.json', currentFood)
             .then(response => {
-                this.setState({loading: false, saving: false});
-                this.loadFoods()
+                setLoading(false);
+                setSaving(false);
+                //this.loadFoods()
             })
             .catch(error => {
-                this.setState({loading: false, saving: false});
+                setLoading(false);
+                setSaving(false);
             });
     }
 
-    loadFoods() {
-        this.props.loadFood();
+    const loadFoods = () => {
+        props.loadFood();
     }
 
-    foodSaveCancelHandler = () => {
-        this.setState({saving: false});
+    const foodSaveCancelHandler = () => {
+        setSaving(false);
     }
 
-    servingHandler = () => {
-        if (!this.state.addServing){
-            this.setState({addServing: true});
-        }else{
-            this.setState({addServing: false});
-        }
-        
-    }
 
-    brandHandler = (props) => {
+
+    const brandHandler = (props) => {
         switch (props){
             case 'generic':
-                this.setState({showBrand: false});
+                setShowBrand(false);
                 break;
             case 'brand':
-                this.setState({showBrand: true});
+                setShowBrand(true);
                 break;
             default:
         }
     };
 
-    saveServingHandler = (serving) => {
+    const saveServingHandler = (serving) => {
         const newServing = {
             "servingSize" : serving.servingSize,
             "servingSizeDesc" : serving.servingSizeDesc,
@@ -177,63 +230,56 @@ class FoodCreator extends Component {
         }
         console.log(newServing)
         // //Add new serving to old servings array
-        // const allServings = [...this.state.servings, newServing]
+        const allServings = [servings, newServing]
 
-        // this.setState({servings: allServings, addServing: false})
+        setServings(allServings)
     }; 
 
-    servingCancelHandler = () => {
-        this.setState({addServing: false});
+    const servingErrorHandler = () => {
+        setServingError(true);
+    };
+
+    const servingErrorCancelHandler = () => {
+        setServingError(false);
+    };
+
+
+    let foodSummary = null;
+
+    if (currentFood){
+        // foodSummary = <FoodSummary 
+        //     food={currentFood}
+        //     foodSaveCancelled ={foodSaveCancelHandler}
+        //     foodSaveContinued = {foodSaveContinueHandler}/>
     }
 
-    servingErrorHandler = () => {
-        this.setState({servingError: true})
-    };
 
-    servingErrorCancelHandler = () => {
-        this.setState({servingError: false})
-    };
-
-    render(){
-
-        let foodSummary = null;
-
-        if (this.state.currentFood){
-            // foodSummary = <FoodSummary 
-            //     food={this.state.currentFood}
-            //     foodSaveCancelled ={this.foodSaveCancelHandler}
-            //     foodSaveContinued = {this.foodSaveContinueHandler}/>
-        }
-
-      
-
-        const title = this.props.show ? <div>
-            <h2>Add a Food</h2>
-        </div> : null;
+    const title = props.show ? <div>
+        <h2>Add a Food</h2>
+    </div> : null;
 
 
-        const brandContainer = this.state.showBrand ? <div className="row" id="brandNameContainer">
-            <div className={"col-sm-6"}>
+    const brandContainer = showBrand ? <div className="row" id="brandNameContainer">
+        <div className={"col-sm-6"}>
 
-            </div>
-            <div className={"col-sm-6"} >
-                <div className={"row align-items-center"}>
-                    <label htmlFor="brandName" className="form-label col-sm-4">Brand Name</label>
-                    <div className="col-sm-8">
-                        <input type="text" className="form-control" id="brandName"/> 
-                    </div>
+        </div>
+        <div className={"col-sm-6"} >
+            <div className={"row align-items-center"}>
+                <label htmlFor="brandName" className="form-label col-sm-4">Brand Name</label>
+                <div className="col-sm-8">
+                    <input type="text" className="form-control" id="brandName"/> 
                 </div>
-            </div>           
-        </div> : null
+            </div>
+        </div>           
+    </div> : null
 
 
-        const servingsContainer = this.state.servings.length > 0 ? <Servings servings={this.state.servings} /> : null
+    const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : null
 
-        
-        // only show the creator is props.show is true
-        const foodCreator = this.props.show ? <FoodContainer>
-        
-        <form onSubmit={this.handleSubmit}>
+    
+    // only show the creator is props.show is true
+    const foodCreator = props.show ? <FoodContainer>
+        <form onSubmit={handleSubmit}>
             <div className="container">
                 <div className="form-group row align-items-center"> 
                     <label htmlFor="foodName" className="form-label col-sm-2">Food Name</label>
@@ -245,10 +291,10 @@ class FoodCreator extends Component {
                             <label htmlFor="type" className="form-label col-sm-4">Type</label> 
                             <div className="btn-group btn-group-toggle col-sm-8" data-toggle="buttons">
                                 <label className="btn btn-sm btn-primary active">
-                                    <input type="radio" name="type" value="generic" defaultChecked onClick={() => this.brandHandler('generic')}/> Generic 
+                                    <input type="radio" name="type" value="generic" defaultChecked onClick={() => brandHandler('generic')}/> Generic 
                                 </label>
                                 <label className="btn btn-sm btn-primary">
-                                    <input type="radio" name="type" value="brand" onClick={() => this.brandHandler('brand')}/> Brand 
+                                    <input type="radio" name="type" value="brand" onClick={() => brandHandler('brand')}/> Brand 
                                 </label>
                             </div>
                         </div> 
@@ -265,8 +311,8 @@ class FoodCreator extends Component {
 
                 <div className="row">
                     <div className="col">
-                        <AddServingDiv onClick={this.servingHandler}>
-                            {!this.state.addServing ? 'Add Serving' : 'Cancel'}
+                        <AddServingDiv onClick={props.addServ}>
+                            {!addServing ? 'Add Serving' : 'Cancel'}
                         </AddServingDiv>
                     </div>
                 </div>
@@ -284,30 +330,27 @@ class FoodCreator extends Component {
                 <button className="btn btn-sm btn-block btn-success" type='submit'>Save Food</button>
             </div>
         </form>
-        
     </FoodContainer> : null;
 
-    const backButtons = this.props.show ? <button className="btn btn-sm btn-block btn-danger" type='button' onClick={this.props.backHandler}>Back</button> : null;
+    const backButtons = props.show ? <button className="btn btn-sm btn-block btn-danger" type='button' onClick={props.backHandler}>Back</button> : null;
 
-        return (
-            <Fragment>
-                <Modal show={this.state.saving} modalClosed={this.foodSaveCancelHandler}>
-                    {foodSummary}
-                </Modal>
-                <ModalInner show={this.state.addServing} modalClosed={this.servingCancelHandler}>
-                    <ServingCreator show={this.state.addServing} saveServingHandler={serving => this.saveServingHandler(serving)} errorHandler={this.servingErrorHandler}/>
-                </ModalInner>
-                <Modal show={this.state.servingError} modalClosed={this.servingErrorCancelHandler}>
-                    <p>Error</p>
-                </Modal>
-                {title}
-                {foodCreator}
-                {backButtons}
-            </Fragment>
-        );
-    }
+    return (
+        <Fragment>
+            <Modal show={saving} modalClosed={foodSaveCancelHandler}>
+                {foodSummary}
+            </Modal>
+            {/* <ModalInner show={addServing} modalClosed={servingCancelHandler}>
+                <ServingCreator show={addServing} saveServingHandler={serving => saveServingHandler(serving)} errorHandler={servingErrorHandler}/>
+            </ModalInner> */}
+            <Modal show={servingError} modalClosed={servingErrorCancelHandler}>
+                <p>Error</p>
+            </Modal>
+            {title}
+            {foodCreator}
+            {backButtons}
+        </Fragment>
+    );
+}
     
-    
-};
 
 export default FoodCreator;

@@ -17,10 +17,10 @@ const ModalDiv = styled.div`
     max-height: 80%;
     overflow-y: auto;
 
-    @media (min-width: 600px) {
-        width: 500px;
-        left: calc(50% - 250px);
-    }
+    // @media (min-width: 600px) {
+    //     width: 500px;
+    //     left: calc(50% - 250px);
+    // }
 `;
 
 const Modal = React.memo((props) => {

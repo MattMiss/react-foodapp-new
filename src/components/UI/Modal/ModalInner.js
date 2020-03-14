@@ -14,7 +14,7 @@ const Modal = styled.div`
     top: 10%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
-    max-height: 80%;
+    height: 80%;
     overflow-y: auto;
 `;
 

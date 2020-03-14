@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import FoodCreator from '../../components/FoodRecipes/Creators/FoodCreator/FoodCreator';
 import RecipeCreator from '../../components/FoodRecipes/Creators/RecipeCreator/RecipeCreator';
 import ChooseItem from '../../components/FoodRecipes/Creators/ChooseItem';
+import ServingCreator from '../../components/FoodRecipes/Creators/FoodCreator/Servings/ServingCreator/ServingCreator';
 import styled from 'styled-components';
 import * as actionTypes from '../../store/actions';
 
@@ -43,6 +44,8 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
     const [chooseItem, setChooseItem] = useState(false);
     const [showFoodCreator, setShowFoodCreator] = useState(false);
     const [showRecipeCreator, setShowRecipeCreator] = useState(false);
+    const [addServing, setAddServing] = useState(false);
+
 
     useEffect(() => {
         axios.get('https://react-food-app-3532b.firebaseio.com/food-items.json')
@@ -100,6 +103,16 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
         setShowRecipeCreator(false);
     };
 
+    const showAddServingHandler = () => {
+        setAddServing(prev => !prev);
+    }
+
+    const saveServingHandler = (serv) => {
+        
+    }
+
+    
+
     const foodAndRecipes = [...storedFood, ...storedRecipes]; 
 
     const ModalAdded = (props) => {
@@ -111,9 +124,12 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
         <div>
             <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
-                <FoodCreator show={showFoodCreator} backHandler={backHandler} />
+                <FoodCreator show={showFoodCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
                 <RecipeCreator show={showRecipeCreator} backHandler={backHandler} />
                 <ModalAdded name="Food/Recipe Creator Modal Added in [Main.js]"/>
+            </Modal>
+            <Modal show={addServing} modalClosed={showAddServingHandler}>
+                <ServingCreator show={addServing} saveServing={serving => saveServingHandler(serving)} />
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>

@@ -6,6 +6,7 @@ import RecentSlideList from '../../components/Meals/MealList/RecentSlideList';
 import SingleDayMeals from '../../components/Meals/SingleDayMeals/SingleDayMeals';
 import Modal from '../../components/UI/Modal/Modal';
 import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
+import CalendarPicker from '../../components/Calendar/CalendarPicker';
 import * as actionTypes from '../../store/actions';
 import styled from 'styled-components';
 
@@ -165,12 +166,17 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
     const foodAndRecipes = [...storedFood, ...storedRecipes];
     const mealChoiceTitle = storedMealChoice ? storedMealChoice.id : '';
 
+    const date = new Date();
+    const todaysDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+    
+
     return(
         <div>
             <Modal show={addItem} modalClosed={addItemHandler}>
                 <ItemList items={foodAndRecipes} clicked={item => addItemChoiceHandler(item)}/>
                 <ModalAdded name="Item List Modal added in [Meals.js]"/>
             </Modal>
+            
             <Modal show={savePrompt} modalClosed={cancelSavePromptHandler}>
                 <div>
                     <center>Save Meal?</center>
@@ -196,13 +202,21 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
             </ItemDiv> */}
 
             <ItemDiv>
-                Recent Meals
+                {todaysDate.month + '-' + todaysDate.day + '-' + todaysDate.year}
+            </ItemDiv>
+
+            <ItemDiv>
                 <RecentSlideList 
                     items={storedMeals} 
                     mealChoice={storedMealChoice} 
                     promptSave={item => startSavePrompt(item)} 
                     clicked={meal => recentMealClickHandler(meal)}
                     addNewDate={() => addNewDateHandler()}/>
+            </ItemDiv>
+
+            <ItemDiv>
+                  <CalendarPicker currentDate={date}/>
+
             </ItemDiv>
 
             <ItemDiv padding={'0.8em'}>

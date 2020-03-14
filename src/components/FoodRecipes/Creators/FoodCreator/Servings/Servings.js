@@ -68,6 +68,7 @@ const Servings = (props) => {
                                 clipRule="evenodd"
                             />
                         </svg>
+
                     </button>                
                 </Col>
                 <Col> 

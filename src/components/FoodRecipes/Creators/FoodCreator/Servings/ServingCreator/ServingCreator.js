@@ -61,7 +61,7 @@ const ServingCreator = React.memo((props) => {
         console.log(fields)
 
         if (allFieldsFilled){
-            props.saveServingHandler(fields);
+            props.saveServing(fields);
         }else{
             props.errorHandler();
         }
@@ -234,7 +234,7 @@ const ServingCreator = React.memo((props) => {
 
             <Row>
                 <Col className="text-center">
-                    <button className="btn btn-sm btn-primary" type="button" onClick={handleSubmit}>Save Serving</button>
+                    <button className="btn btn-sm btn-primary" type="button" onClick={saveServingHandler}>Save Serving</button>
                 </Col>
             </Row>
         </div> : null  
