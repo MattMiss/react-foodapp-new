@@ -3,6 +3,7 @@ export const RETRIEVE_RECIPES = 'RETRIEVE_RECIPES';
 export const RETRIEVE_MEALS = 'RETRIEVE_MEALS';
 export const ADD_MEAL = 'ADD_MEAL';
 export const REMOVE_MEAL = 'REMOVE_MEAL';
+export const CANCEL_MEAL_EDIT = 'CANCEL_MEAL_EDIT';
 export const MEAL_CHOICE = 'MEAL_CHOICE';
 
 

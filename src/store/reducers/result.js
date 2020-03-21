@@ -6,6 +6,7 @@ const initialState = {
     mealResults: [],
     mealChoice: {
         meal: null,
+        editedMeal: null,
         editing: false
     }
 };
@@ -61,11 +62,22 @@ const reducer = ( state = initialState, action ) => {
                 }  
             }
         case actionTypes.MEAL_CHOICE: 
+            let newChoice = null;
+
+            
+
+            // CREATE A NEW MEAL WITH A DATE ID AND NO NUTRIENTS
+            if (action.choice === 'new'){
+                console.log("NEWWWWWWWWWWWWWWWWWWW")   
+            }else {
+                newChoice = action.choice;
+            }
 
             return {
                 ...state,
+                
                 mealChoice: {
-                    meal: action.choice,
+                    meal: newChoice,
                     editing: false
                 }
             }
@@ -124,8 +136,12 @@ const reducer = ( state = initialState, action ) => {
                     }
                     newState.mealResults[mealItem] = updatedMeal;
 
+                    // Only changed the editedMeal if its not currently being edited, or else the original editMeal will be overwritten
+                    const newEditMeal = state.mealChoice.editing ? state.mealChoice.editedMeal : state.mealChoice.meal;
+
                     newState.mealChoice = {
                         meal: updatedMeal,
+                        editedMeal: newEditMeal,
                         editing: true
                     }
                     console.log(newState)
@@ -196,8 +212,14 @@ const reducer = ( state = initialState, action ) => {
                     console.log(updatedMeal)
                     
                     newRemoveState.mealResults[mealItem] = updatedMeal;
+
+                    // Only changed the editedMeal if its not currently being edited, or else the original editMeal will be overwritten
+                    const newEditMeal = state.mealChoice.editing ? state.mealChoice.editedMeal : state.mealChoice.meal;
+
+
                     newRemoveState.mealChoice = {
                         meal: updatedMeal,
+                        editedMeal: newEditMeal,
                         editing: true
                     }
                 }
@@ -205,6 +227,21 @@ const reducer = ( state = initialState, action ) => {
             });
 
             return newRemoveState;
+        
+        case actionTypes.CANCEL_MEAL_EDIT:
+            
+            let newEditState = {...state};
+
+            // Set mealChoice back to the original unedited meal
+            const oldMeal = {
+                meal: state.mealChoice.editedMeal,
+                editedMeal: null,
+                editing: false
+            }
+
+            newEditState.mealChoice = oldMeal;
+
+            return newEditState;
         default:
     }
 

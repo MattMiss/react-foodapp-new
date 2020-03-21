@@ -8,11 +8,12 @@ import Modal from '../../components/UI/Modal/Modal';
 import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
 import CalendarPicker from '../../components/Calendar/CalendarPicker';
 import * as actionTypes from '../../store/actions';
+import { Container, Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const ItemDiv = styled.div`
     margin: 1em auto;
-    width: 80%;  
+    width: 85%;  
     min-width: 300px;
     text-align: center;
     border: 2px solid #ccc;
@@ -24,14 +25,30 @@ const ItemDiv = styled.div`
     }
 `;
 
+const DateChoiceBtn = styled.button`
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    color: #00a5ff;
+    border: 2px solid #00a5ff;
+    border-radius: 3px;
+    padding: 5px;
+
+    &:hover {
+        background-color: #182955;
+        color: #00a5ff;
+        cursor: pointer;
+    }
+
+`;
 
 const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice, 
     onRetrieveFood, onRetrieveRecipes, onRetrieveMeals, onMealChoice, 
-    onAddMeal, onRemoveMeal}) => {
+    onAddMeal, onRemoveMeal, onCancelMealEdit}) => {
 
     const [addItem, setAddItem] = useState(false);
     const [savePrompt, setSavePrompt] = useState(false);
-    //const [chooseDate, setChooseDate] = useState(false);
+    const [showRecentMeals, setShowRecentMeals] = useState(true);
 
     useEffect(() => {
         // Load Meals
@@ -70,6 +87,18 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
         });
 
     },[onRetrieveRecipes]);
+
+    const recentMealHandler = () => {
+        if (!showRecentMeals){
+            setShowRecentMeals(true);
+        }  
+    }
+
+    const calanderHandler = () => {
+        if (showRecentMeals){
+            setShowRecentMeals(false);
+        }
+    }
 
     const recentMealClickHandler = (meal) => {
         console.log(meal)
@@ -154,17 +183,17 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
         // setChooseDate(true);
     };
 
-    // const chooseDateCancelHandler = () => {
-    //     setChooseDate(false);
-    // }
+    const cancelMealSaveHandler = () => {
+       onCancelMealEdit(); 
+    };
 
     const ModalAdded = (props) => {
         console.log("Modal added in " + props.name);
         return null;
-    }
-
+    } 
+    console.log(storedMealChoice)
     const foodAndRecipes = [...storedFood, ...storedRecipes];
-    const mealChoiceTitle = storedMealChoice ? storedMealChoice.id : '';
+    const mealChoiceTitle = storedMealChoice.meal ? storedMealChoice.meal.id : '';
 
     const date = new Date();
     const todaysDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
@@ -202,29 +231,47 @@ const Meals = ({storedFood, storedRecipes, storedMeals, storedMealChoice,
             </ItemDiv> */}
 
             <ItemDiv>
-                {todaysDate.month + '-' + todaysDate.day + '-' + todaysDate.year}
-            </ItemDiv>
+                <Container>
+                    <Row className="my-2">
+                        <Col className="px-1">
+                            <DateChoiceBtn onClick={recentMealHandler}>RECENT MEALS</DateChoiceBtn>
+                        </Col>
+                        <Col className="px-1">
+                            <DateChoiceBtn onClick={calanderHandler}>CHOOSE DATE</DateChoiceBtn>
+                        </Col>
+                    </Row>
+                </Container>
 
-            <ItemDiv>
                 <RecentSlideList 
+                    show={showRecentMeals}
                     items={storedMeals} 
                     mealChoice={storedMealChoice} 
                     promptSave={item => startSavePrompt(item)} 
                     clicked={meal => recentMealClickHandler(meal)}
                     addNewDate={() => addNewDateHandler()}/>
+                    
+                 <CalendarPicker 
+                    show={!showRecentMeals}
+                    currentDate={date}
+                    items={storedMeals} 
+                    clicked={meal => recentMealClickHandler(meal)}/>
             </ItemDiv>
 
-            <ItemDiv>
-                  <CalendarPicker currentDate={date}/>
+            {/* <ItemDiv padding={'0.4em'}>
+                  <CalendarPicker 
+                    currentDate={date}
+                    items={storedMeals} 
+                    clicked={meal => recentMealClickHandler(meal)}/>
 
-            </ItemDiv>
+            </ItemDiv> */}
 
             <ItemDiv padding={'0.8em'}>
                 {mealChoiceTitle}
                 <SingleDayMeals 
                     mealChoice={storedMealChoice} 
                     addItemHandler={addItemHandler} 
-                    deleteItemHandler={item => deleteItemChoiceHandler(item)}/>
+                    deleteItemHandler={item => deleteItemChoiceHandler(item)}
+                    cancelMealSave={cancelMealSaveHandler}/>
             </ItemDiv>
             
 
@@ -256,6 +303,7 @@ const mapDispatchToProps = dispatch => {
         onRetrieveRecipes: (result) => dispatch({type: actionTypes.RETRIEVE_RECIPES, result: result}),
         onAddMeal: (chc, ml) => dispatch({type:actionTypes.ADD_MEAL, choice: chc, meal: ml}),
         onRemoveMeal: (chc, ml) => dispatch({type:actionTypes.REMOVE_MEAL, choice: chc, meal: ml}),
+        onCancelMealEdit: () => dispatch({type:actionTypes.CANCEL_MEAL_EDIT}),
         onMealChoice: (chc) => dispatch({type: actionTypes.MEAL_CHOICE, choice: chc})
     }
 };

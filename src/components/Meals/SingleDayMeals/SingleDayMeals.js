@@ -10,6 +10,7 @@ const MealsDayDiv = styled.div`
     `;
 
 
+
 const singleDayMeals = (props) => {
 
 
@@ -18,10 +19,15 @@ const singleDayMeals = (props) => {
             <Container>
                 <Row>
                     <Col sm className="px-1">
-                        <MealNutrients meal={props.mealChoice} />
+                        <MealNutrients 
+                            meal={props.mealChoice} />
                     </Col>
                     <Col sm className="px-1">
-                        <SingleDayMealList meal={props.mealChoice} addItemHandler={props.addItemHandler} deleteItem={item => props.deleteItemHandler(item)}/>
+                        <SingleDayMealList 
+                            meal={props.mealChoice} 
+                            addItemHandler={props.addItemHandler} 
+                            deleteItem={item => props.deleteItemHandler(item)}
+                            cancelMealSave = {props.cancelMealSave}/>
                     </Col>
                 </Row>
             </Container>

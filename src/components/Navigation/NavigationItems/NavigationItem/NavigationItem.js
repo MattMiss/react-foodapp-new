@@ -8,6 +8,14 @@ const NavigationItemLi = styled.li`
     display: block;
     width: 100%;
 
+    & > a {
+        color: #5C9210;
+        text-decoration: none;
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+    }
+
     &:hover {
         background-color: red;
     }
@@ -18,6 +26,19 @@ const NavigationItemLi = styled.li`
         height: 100%;
         width: auto;
         align-items: center;
+
+        & > a {
+            color: white;
+            height: 100%;
+            padding: 16px 10px;
+            border-bottom: 4px solid transparent;
+        }
+
+        &:hover {
+            background-color: #8F5C2C;
+            border-bottom: 4px solid #40A4C8;
+            color: white;
+        }
     }
 `;
 

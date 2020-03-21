@@ -25,13 +25,31 @@ const DltBtn = styled.div`
 
 `;
 
+
+
 const singleDayMealList = (props) => {
+
+    
+
     const editing = props.meal.meal ? props.meal.editing.toString() : 'No meal';
+
+    const buttonDiv = props.meal.editing ? <Row>
+        <Col>
+            <Button variant="danger" size="sm" block className="mt-3" onClick={props.cancelMealSave} > 
+                CANCEL
+            </Button>
+        </Col>
+        <Col>
+            <Button variant="success" size="sm" block className="mt-3" onClick={props.addItemHandler} > 
+                SAVE
+            </Button>
+        </Col>
+    </Row> : null;
 
     let meals = props.meal.meal ? props.meal.meal.meals.map((result, index) => {
         //console.log(result)
         return <ListItemDiv key={result.name + index}>
-                    <Col sm={5} className="px-1 text-left">
+                    <Col xs={5} className="px-1 text-left">
                         {result.name}
                     </Col>
                     <Col className="px-1">
@@ -40,7 +58,7 @@ const singleDayMealList = (props) => {
                     <Col className="px-1">
                         {result.servSize} {result.servSizeDesc}
                     </Col>
-                    <Col sm={1} className="px-0 my-auto">
+                    <Col xs={1 }className="px-0 my-auto">
                         <DltBtn onClick={() => props.deleteItem(result)}>x</DltBtn>
                     </Col>
                 </ListItemDiv>;   
@@ -68,6 +86,7 @@ const singleDayMealList = (props) => {
                 <Button variant="primary" size="sm" block className="mt-3" onClick={props.addItemHandler} > 
                     ADD
                 </Button>
+                {buttonDiv}
                 {editing}
             </Container>
             
