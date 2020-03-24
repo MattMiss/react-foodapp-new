@@ -3,8 +3,9 @@ import React, { Fragment, useState } from 'react';
 import Modal from '../../../UI/Modal/Modal';
 import ModalInner from '../../../UI/Modal/ModalInner';
 //import FoodSummary from '../FoodSummary/FoodSummary';
-import ServingCreator from './Servings/ServingCreator/ServingCreator';
+import Search from '../../Searchers/Search';
 import Servings from './Servings/Servings';
+import {Container, Row, Col } from 'react-bootstrap';
 import axios from '../../../../axios-food';
 import styled from 'styled-components';
 
@@ -14,13 +15,14 @@ const FoodContainer = styled.div`
     font-size: 12px;
 `;
 
-const AddServingDiv = styled.div`
+const BtnDiv = styled.div`
     text-align: center;
     font-size: 1.2em;
     background-color: #00a5ff;
     color: white;
     margin-top: 10px;
     border-radius: 3px;
+    padding: 5px;
 
     &:hover {
         cursor: pointer;
@@ -89,64 +91,8 @@ const FoodCreator = (props) => {
     const [currentServing, setCurrentServing] = useState(null);
     const [servingError, setServingError] = useState(null);
     const [error, setError] = useState(null);
+    const [searchFood, setSearchFood] = useState(false);
 
-
-    // state = {
-    //     currentFood: null,
-    //     saving: false,
-    //     addServing: false,
-    //     showBrand: false,
-        // servings: [{
-        //     servingSize: "123",
-        //     servingSizeDesc: "ty",
-        //     metricSize: "12",
-        //     metricSizeDesc: "g",
-        //     nutrients: {
-        //         calcium: "786",
-        //         calories: "123",
-        //         carbs: "954",
-        //         cholesterol: "1567",
-        //         fat: "774",
-        //         fiber: "28",
-        //         iron: "26",
-        //         monoFat: "945",
-        //         polyFat: "14",
-        //         potassium: "346",
-        //         protein: "865",
-        //         saturatedFat: "234",
-        //         sodium: "563",
-        //         sugars: "346",
-        //         vitaminA: "2457",
-        //         vitaminC: "457",
-        //     }
-        // },
-        // {
-        //     servingSize: "5637",
-        //     servingSizeDesc: "df",
-        //     metricSize: "3",
-        //     metricSizeDesc: "g",
-        //     nutrients: {
-        //         calcium: "678",
-        //         calories: "3567",
-        //         carbs: "5368",
-        //         cholesterol: "857",
-        //         fat: "568",
-        //         fiber: "4654",
-        //         iron: "234",
-        //         monoFat: "64",
-        //         polyFat: "12",
-        //         potassium: "6",
-        //         protein: "568",
-        //         saturatedFat: "978",
-        //         sodium: "89",
-        //         sugars: "687",
-        //         vitaminA: "564",
-        //         vitaminC: "47",
-        //     }
-        // }],
-    //     currentServing: null,
-    //     servingError: false
-    // } 
 
 
     const handleSubmit = (event) => {
@@ -243,6 +189,9 @@ const FoodCreator = (props) => {
         setServingError(false);
     };
 
+    const searchFoodHandler = () => {
+        setSearchFood(prev => !prev);
+    }
 
     let foodSummary = null;
 
@@ -273,6 +222,15 @@ const FoodCreator = (props) => {
         </div>           
     </div> : null
 
+    const searchBtnDiv = props.show ? <BtnDiv onClick={searchFoodHandler}>
+        <Container>
+            <Row>
+                <Col>
+                    Search Online
+                </Col>
+            </Row>
+        </Container>
+    </BtnDiv> : null;
 
     const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : null
 
@@ -311,9 +269,9 @@ const FoodCreator = (props) => {
 
                 <div className="row">
                     <div className="col">
-                        <AddServingDiv onClick={props.addServ}>
+                        <BtnDiv onClick={props.addServ}>
                             {!addServing ? 'Add Serving' : 'Cancel'}
-                        </AddServingDiv>
+                        </BtnDiv>
                     </div>
                 </div>
                 
@@ -339,13 +297,14 @@ const FoodCreator = (props) => {
             <Modal show={saving} modalClosed={foodSaveCancelHandler}>
                 {foodSummary}
             </Modal>
-            {/* <ModalInner show={addServing} modalClosed={servingCancelHandler}>
-                <ServingCreator show={addServing} saveServingHandler={serving => saveServingHandler(serving)} errorHandler={servingErrorHandler}/>
-            </ModalInner> */}
             <Modal show={servingError} modalClosed={servingErrorCancelHandler}>
                 <p>Error</p>
             </Modal>
+            <Modal show={searchFood} modalClosed={searchFoodHandler}>
+                <Search isRecipe={false}/>
+            </Modal>
             {title}
+            {searchBtnDiv}
             {foodCreator}
             {backButtons}
         </Fragment>

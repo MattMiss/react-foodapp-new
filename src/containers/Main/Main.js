@@ -108,7 +108,7 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
     }
 
     const saveServingHandler = (serv) => {
-        
+        // find a way to add the serving to either the food creator or the recipe creator
     }
 
     
@@ -125,7 +125,7 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
             <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
                 <FoodCreator show={showFoodCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
-                <RecipeCreator show={showRecipeCreator} backHandler={backHandler} />
+                <RecipeCreator show={showRecipeCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
                 <ModalAdded name="Food/Recipe Creator Modal Added in [Main.js]"/>
             </Modal>
             <Modal show={addServing} modalClosed={showAddServingHandler}>
@@ -135,13 +135,6 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>
             </ItemDiv>
             <ItemList items={foodAndRecipes} clicked={item => foodRecipeClicked(item)}/>
-            {/* <AddItemDiv 
-                showFood = {() => this.showFoodCreatorHandler()}
-                showRecipe = {() => this.showRecipeCreatorHandler()}/>
-            <FoodCreator show={this.state.showFood} loadFood={() => this.reload()}/>   
-            <RecipeCreator show={this.state.showRecipe} loadFood={() => this.reload()}/>            
-            <hr />
-            <FoodList items={this.props.storedFood} clicked={(foodItem) => this.foodClickedHandler(foodItem)}/>                 */}
         </div>
     );
     

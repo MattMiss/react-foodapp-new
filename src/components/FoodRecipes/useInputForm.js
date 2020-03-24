@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const UseServingForm = (callback) => {
+const UseInputForm = (callback) => {
 
     const [fields, setFields] = useState({});
 
@@ -12,7 +12,6 @@ const UseServingForm = (callback) => {
     }
 
     const handleInputChange = (event) => {
-        console.log(event)
       event.persist();
       setFields(fields => ({...fields, [event.target.id]: event.target.value}));
     }
@@ -25,4 +24,4 @@ const UseServingForm = (callback) => {
   
 }
 
-export default UseServingForm;
+export default UseInputForm;
