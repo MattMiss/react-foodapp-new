@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import Serving from './Serving/Serving';
+import Serving from './Serving';
 import styled from 'styled-components';
 import { Row, Col } from 'react-bootstrap';
 
@@ -20,12 +20,13 @@ const CurrentSrvSizeDiv = styled.div`
 
 
 const Servings = (props) => {
-    
+    console.log(props)
     const [index, setIndex] = useState(0);
 
     const changeServing = (move) => {
         const servingsLengthIndex = props.servings.length - 1;
         switch(move) {
+
             case 'left':
                 if (index === 0){
                     setIndex(servingsLengthIndex);

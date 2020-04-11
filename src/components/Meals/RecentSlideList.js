@@ -1,7 +1,7 @@
 import React from 'react';
 import { animated, useSpring } from "react-spring";
 import { useScroll } from "react-use-gesture";
-import { getMonthTxt } from '../../../utils/calendarHelper';
+import { getMonthTxt } from '../../utils/calendarHelper';
 import styled from "styled-components";
 import './RecentSlideList.css';
 

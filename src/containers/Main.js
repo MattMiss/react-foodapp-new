@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import axios from '../../axios-food';
-import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
-import Modal from '../../components/UI/Modal/Modal';
-import FoodCreator from '../../components/FoodRecipes/Creators/FoodCreator/FoodCreator';
-import RecipeCreator from '../../components/FoodRecipes/Creators/RecipeCreator/RecipeCreator';
-import ChooseItem from '../../components/FoodRecipes/Creators/ChooseItem';
-import ServingCreator from '../../components/FoodRecipes/Creators/FoodCreator/Servings/ServingCreator/ServingCreator';
+import axios from '../axios-food';
+import ItemList from '../components/FoodRecipes/ItemList/ItemList';
+import Modal from '../components/UI/Modal';
+import FoodCreator from '../components/FoodRecipes/Creators/FoodCreator';
+import RecipeCreator from '../components/FoodRecipes/Creators/RecipeCreator';
+import ChooseItem from '../components/FoodRecipes/Creators/ChooseItem';
+import ServingCreator from '../components/FoodRecipes/Creators/ServingCreator';
 import styled from 'styled-components';
-import * as actionTypes from '../../store/actions';
+import * as actionTypes from '../store/actions';
 
 
 const ItemDiv = styled.div`
@@ -83,10 +83,6 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
 
     };
 
-    const handleSubmit = () => {
-        
-    };
-
     const foodOrRecipeChosen = (item) => {
         //console.log(item);
         if(item === 'food'){
@@ -104,32 +100,19 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
     };
 
     const showAddServingHandler = () => {
-        setAddServing(prev => !prev);
+        //used for ServingCreator (outside modal version)
+        //setAddServing(prev => !prev);
     }
-
-    const saveServingHandler = (serv) => {
-        // find a way to add the serving to either the food creator or the recipe creator
-    }
-
     
 
     const foodAndRecipes = [...storedFood, ...storedRecipes]; 
-
-    const ModalAdded = (props) => {
-        console.log("Modal added in " + props.name);
-        return null;
-    }
 
     return (
         <div>
             <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
-                <FoodCreator show={showFoodCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
+                <FoodCreator showCreator={showFoodCreator} backHandler={backHandler} />
                 <RecipeCreator show={showRecipeCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
-                <ModalAdded name="Food/Recipe Creator Modal Added in [Main.js]"/>
-            </Modal>
-            <Modal show={addServing} modalClosed={showAddServingHandler}>
-                <ServingCreator show={addServing} saveServing={serving => saveServingHandler(serving)} />
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>

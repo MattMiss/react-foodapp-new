@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from 'react';
 
-import Modal from '../../../UI/Modal/Modal';
-import CategoryGrid from './CategoryGrid/CategoryGrid';
-import Servings from '../FoodCreator/Servings/Servings';
-import Search from '../../Searchers/Search';
+import Modal from '../../UI/Modal';
+import CategoryGrid from './CategoryGrid';
+import Servings from './Servings';
+import Search from '../Searchers/Search';
 import styled from 'styled-components';
-import Directions from './Directions/Directions';
+import Directions from './Directions';
 import { Container, Row, Col } from 'react-bootstrap';
 //import axios from '../../../axios-food';
 

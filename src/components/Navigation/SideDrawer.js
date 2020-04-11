@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import NavigationItems from '../NavigationItems/NavigationItems';
-import BackDrop from '../../UI/Backdrop/Backdrop';
+import NavigationItems from './NavigationItems';
+import BackDrop from '../UI/Backdrop';
 import styled from 'styled-components';
 
 const SideDrawerDiv = styled.div`

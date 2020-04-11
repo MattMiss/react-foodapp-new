@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import MealNutrients from '../MealNutrients/MealNutrients';
-import SingleDayMealList from '../SingleDayMealList/SingleDayMealList';
+import MealNutrients from './MealNutrients';
+import SingleDayMealList from './SingleDayMealList';
 import {Container, Row, Col} from 'react-bootstrap';
 
 

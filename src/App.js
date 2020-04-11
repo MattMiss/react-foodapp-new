@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Main from './containers/Main/Main';
-import Meals from './containers/Meals/Meals';
-import Layout from './hoc/Layout/Layout';
+import Main from './containers/Main';
+import Meals from './containers/Meals';
+import Layout from './hoc/Layout';
 import styled from 'styled-components';
 
 const AppDiv = styled.div`

@@ -25,13 +25,15 @@ const ServingsDiv = styled.div`
     text-align:center 
 `;
 
-const serving = (props) => {
-    //console.log(props)
+const serving = ({serving}) => {
+    console.log(serving)
+
+    
     return(
         <ServingsDiv>
             <DarkerRow> 
                 <Col>
-                    <Label >Calories</Label> <SmallSpan>{props.serving.nutrients.calories}</SmallSpan>
+                    <Label >Calories</Label> <SmallSpan>{serving.nutrients.calories}</SmallSpan>
                 </Col>
             </DarkerRow>
             
@@ -44,7 +46,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.fat}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.fat}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -56,7 +58,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.saturatedFat}g</SmallSpan>   
+                            <SmallSpan>{serving.nutrients.saturatedFat}g</SmallSpan>   
                         </Col>
                     </Row>
                 </Col>
@@ -68,7 +70,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.polyFat}g</SmallSpan>  
+                            <SmallSpan>{serving.nutrients.polyFat}g</SmallSpan>  
                         </Col>
                     </Row>
                 </Col>
@@ -80,7 +82,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.monoFat}g</SmallSpan>  
+                            <SmallSpan>{serving.nutrients.monoFat}g</SmallSpan>  
                         </Col>
                     </Row>
                 </Col>
@@ -95,7 +97,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.cholesterol}mg</SmallSpan>
+                            <SmallSpan>{serving.nutrients.cholesterol}mg</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -107,7 +109,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.sodium}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.sodium}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -119,7 +121,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.potassium}mg</SmallSpan>
+                            <SmallSpan>{serving.nutrients.potassium}mg</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -134,7 +136,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.carbs}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.carbs}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -146,7 +148,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.fiber}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.fiber}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -158,7 +160,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.sugars}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.sugars}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -170,7 +172,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.protein}g</SmallSpan>
+                            <SmallSpan>{serving.nutrients.protein}g</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -185,7 +187,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.vitaminA}%</SmallSpan>
+                            <SmallSpan>{serving.nutrients.vitaminA}%</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -197,7 +199,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.vitaminC}%</SmallSpan>
+                            <SmallSpan>{serving.nutrients.vitaminC}%</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -209,7 +211,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.calcium}%</SmallSpan>
+                            <SmallSpan>{serving.nutrients.calcium}%</SmallSpan>
                         </Col>
                     </Row>
                 </Col>
@@ -221,7 +223,7 @@ const serving = (props) => {
                     </Row>
                     <Row className="no-gutters">
                         <Col className="px-0">
-                            <SmallSpan>{props.serving.nutrients.iron}%</SmallSpan>
+                            <SmallSpan>{serving.nutrients.iron}%</SmallSpan>
                         </Col>
                     </Row>
                 </Col>

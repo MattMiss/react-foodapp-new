@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
-import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../components/Navigation/Toolbar';
+import SideDrawer from '../components/Navigation/SideDrawer';
 import styled from 'styled-components';
 
 const MainContent = styled.main`

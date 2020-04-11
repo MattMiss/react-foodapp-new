@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import axios from '../../axios-food';
+import axios from '../axios-food';
 //import RecentMeals from '../../components/Meals/MealList/RecentMeals';
-import RecentSlideList from '../../components/Meals/MealList/RecentSlideList';
-import SingleDayMeals from '../../components/Meals/SingleDayMeals/SingleDayMeals';
-import Modal from '../../components/UI/Modal/Modal';
-import ItemList from '../../components/FoodRecipes/ItemList/ItemList';
-import CalendarPicker from '../../components/Calendar/CalendarPicker';
-import * as actionTypes from '../../store/actions';
+import RecentSlideList from '../components/Meals/RecentSlideList';
+import SingleDayMeals from '../components/Meals/SingleDayMeals';
+import Modal from '../components/UI/Modal';
+import ItemList from '../components/FoodRecipes/ItemList/ItemList';
+import CalendarPicker from '../components/Calendar/CalendarPicker';
+import * as actionTypes from '../store/actions';
 import { Container, Row, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 

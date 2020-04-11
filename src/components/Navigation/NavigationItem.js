@@ -3,40 +3,41 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavigationItemLi = styled.li`
-    margin: 10px 0;
     box-sizing: border-box;
     display: block;
     width: 100%;
+    padding: 10px;
 
     & > a {
-        color: #5C9210;
+        color: rgb(41, 116, 187);
         text-decoration: none;
         width: 100%;
+        font-size: 1.2em;
+        font-weight: 500;
         box-sizing: border-box;
         display: block;
     }
 
     &:hover {
-        background-color: red;
+        background-color: #182955;
     }
 
     @media (min-width: 500px) {
-        margin: 0;
-        display: flex;
         height: 100%;
         width: auto;
         align-items: center;
-
+        padding: 0;
+        
         & > a {
             color: white;
-            height: 100%;
             padding: 16px 10px;
-            border-bottom: 4px solid transparent;
+            font-size: 1.1em;
+            box-sizing: border-box;
         }
 
         &:hover {
-            background-color: #8F5C2C;
-            border-bottom: 4px solid #40A4C8;
+            background-color: #182955;
+            border-bottom: 4px solid palevioletred;
             color: white;
         }
     }

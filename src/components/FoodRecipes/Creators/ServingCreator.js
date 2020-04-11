@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; 
 import styled from 'styled-components';
-import useInputForm from '../../../../useInputForm';
+import useInputForm from '../useInputForm';
 import { Row, Col, InputGroup, FormControl, Dropdown } from 'react-bootstrap';            
 
 
@@ -9,9 +9,11 @@ const ServingContainer = styled.div`
 `;
 
 
-const ServingCreator = React.memo((props) => {
+const ServingCreator = (props) => {
 
     const saveServingHandler = () => {   
+
+        
 
         const allFieldsFilled = (Number(fields.servingSize) > 0 && Number(fields.servingSizeDesc.trim().length) > 0 
                                 && Number(fields.metricSize) > 0 && Number(fields.calories) > 0
@@ -23,15 +25,24 @@ const ServingCreator = React.memo((props) => {
                                 && Number(fields.protein) > 0 && Number(fields.vitaminA) > 0
                                 && Number(fields.vitaminC) > 0 && Number(fields.calcium) > 0
                                 && Number(fields.iron) > 0)
-
         console.log(allFieldsFilled)
         console.log(fields)
 
         if (allFieldsFilled){
-            props.saveServing(fields);
+            // Add Chosen MetricSizeDesc to the fields
+            let newServing = {
+                ...fields,
+                metricSizeDesc: metricDesc
+            }
+
+            props.saveServing(newServing);
         }else{
-            props.errorHandler();
+            props.error();
         }
+    };
+
+    const cancelServing = () => {
+        props.cancel();
     };
  
 
@@ -475,11 +486,12 @@ const ServingCreator = React.memo((props) => {
 
             <Row>
                 <Col className="text-center">
+                    <button className="btn btn-sm btn-danger" type="button" onClick={cancelServing}>Cancel</button>
                     <button className="btn btn-sm btn-primary" type="button" onClick={handleSubmit}>Save Serving</button>
                 </Col>
             </Row>
         </ServingContainer> : null  
     )         
-});
+};
 
 export default ServingCreator;

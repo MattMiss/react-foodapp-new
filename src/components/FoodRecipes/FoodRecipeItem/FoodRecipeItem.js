@@ -72,48 +72,45 @@ const FoodRecipeItem = (props) => {
      
     const nutrients = props.item.servings[0].nutrients;
 
-    const row1 = [
-        {label: "Cal", val: nutrients.calories},
-        {label: "Fat", val: nutrients.fat},
-        {label: "S Fat", val: nutrients.saturatedFat}
-    ];
-
-    const row2 = [
-        
-        {label: "P Fat", val: nutrients.polyFat},
-        {label: "M Fat", val: nutrients.monoFat},
-        {label: "T Fat", val: nutrients.transFat}
-    ];
-
-    const row3 = [
-        
-        {label: "Chol", val: nutrients.cholesterol},
-        {label: "Sodium", val: nutrients.sodium},
-        {label: "Carbs", val: nutrients.carbs}
-    ];
-
-    const row4 = [
-        {label: "Fiber", val: nutrients.fiber},
-        {label: "Sugar", val: nutrients.sugars},
-        {label: "Protein", val: nutrients.protein}
-    ];
-
-    const row5 = [
-        {label: "Calcium", val: nutrients.calcium},
-        {label: "Iron", val: nutrients.iron},
-        {label: "Potass", val: nutrients.potassium}
-    ];
-
-    const row6 = [
-        {label: "Vitamin A", val: nutrients.vitaminA},
-        {label: "Vitamin C", val: nutrients.vitaminC}
-    ];
+    const nutrientRows = {
+        row1: [
+            {label: "Cal", val: nutrients.calories},
+            {label: "Fat", val: nutrients.fat},
+            {label: "S Fat", val: nutrients.saturatedFat}
+        ],
+        row2: [
+            
+            {label: "P Fat", val: nutrients.polyFat},
+            {label: "M Fat", val: nutrients.monoFat},
+            {label: "T Fat", val: nutrients.transFat}
+        ],
+        row3: [
+            
+            {label: "Chol", val: nutrients.cholesterol},
+            {label: "Sodium", val: nutrients.sodium},
+            {label: "Carbs", val: nutrients.carbs}
+        ],
+        row4: [
+            {label: "Fiber", val: nutrients.fiber},
+            {label: "Sugar", val: nutrients.sugars},
+            {label: "Protein", val: nutrients.protein}
+        ],
+        row5: [
+            {label: "Calcium", val: nutrients.calcium},
+            {label: "Iron", val: nutrients.iron},
+            {label: "Potass", val: nutrients.potassium}
+        ],
+        row6: [
+            {label: "Vit A", val: nutrients.vitaminA},
+            {label: "Vit C", val: nutrients.vitaminC}
+        ]
+    }
 
     const nutrientTrigger = <NutCollapseTrigger className={props.item.type}>
         Nutrients
     </NutCollapseTrigger>;
 
-    //console.log(props.item)
+    console.log(props.item)
     return (
         <ItemDiv className={props.item.type} onClick={item => props.clicked(item)}>
                 
@@ -158,12 +155,12 @@ const FoodRecipeItem = (props) => {
                 </Container>
                 <Collapsible trigger={nutrientTrigger}>
                     <NutrientContainer>
-                        <NutrientRow items={row1} />
-                        <NutrientRow items={row2} />
-                        <NutrientRow items={row3} />
-                        <NutrientRow items={row4} />
-                        <NutrientRow items={row5} />
-                        <NutrientRow items={row6} />
+                        <NutrientRow items={nutrientRows.row1} />
+                        <NutrientRow items={nutrientRows.row2} />
+                        <NutrientRow items={nutrientRows.row3} />
+                        <NutrientRow items={nutrientRows.row4} />
+                        <NutrientRow items={nutrientRows.row5} />
+                        <NutrientRow items={nutrientRows.row6} />
                     </NutrientContainer>
                 </Collapsible>
         </ItemDiv>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Backdrop from '../Backdrop/Backdrop';
+import Backdrop from './Backdrop';
 import styled from 'styled-components';
 
 const ModalDiv = styled.div`
