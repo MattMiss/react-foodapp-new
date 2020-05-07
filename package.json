@@ -1,8 +1,12 @@
 {
   "name": "react-food-new-app",
+  "homepage": "https://mattmiss.com/foodtracker/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
@@ -14,6 +18,7 @@
     "querystringify": "^2.1.1",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0-beta.17",
+    "react-card-flip": "^1.0.10",
     "react-collapsible": "^2.7.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.0",

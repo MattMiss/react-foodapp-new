@@ -4,6 +4,7 @@ import Modal from '../../UI/Modal';
 //import FoodSummary from '../FoodSummary/FoodSummary';
 import FoodRecipeItem from '../FoodRecipeItem/FoodRecipeItem';
 import Search from '../Searchers/Search';
+import FoodSummary from './FoodSummary';
 import Servings from './Servings';
 import useInputForm from '../useInputForm';
 import {Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
@@ -227,23 +228,23 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
         foodNameRef.current.value = "Burger"
     };
 
-    if (currentFood){
-        foodSummary = <div >
-            <FoodRecipeItem item={currentFood} clicked={item => console.log(item)}/>
-            <Container>
-                <Row>
-                    <Col>
-                        <button className="btn btn-sm btn-block btn-danger" onClick={foodSaveCancelHandler}>No</button>
-                    </Col>
-                    <Col>
-                        <button className="btn btn-sm btn-block btn-success" onClick={foodSaveContinueHandler}>Yes</button>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+    // if (currentFood){
+    //     foodSummary = <div >
+    //         <FoodRecipeItem item={currentFood} clicked={item => console.log(item)}/>
+    //         <Container>
+    //             <Row>
+    //                 <Col>
+    //                     <button className="btn btn-sm btn-block btn-danger" onClick={foodSaveCancelHandler}>No</button>
+    //                 </Col>
+    //                 <Col>
+    //                     <button className="btn btn-sm btn-block btn-success" onClick={foodSaveContinueHandler}>Yes</button>
+    //                 </Col>
+    //             </Row>
+    //         </Container>
+    //     </div>
         
         
-    }
+    // }
 
 
     const title = <div>
@@ -367,7 +368,7 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
                 <Search isRecipe={false} clear={clearSearch} chosenItem={item => chosenItemHandler(item)}/>
             </Modal>
             {showCreator && !saving ? mainContent : null}
-            {saving ? foodSummary : null}
+            <FoodSummary item={currentFood} showSummary={saving && currentFood} cancelSave={foodSaveCancelHandler} continueSave={foodSaveContinueHandler}/>
         </>
     );
 }
