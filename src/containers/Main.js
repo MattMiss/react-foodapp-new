@@ -6,7 +6,7 @@ import Modal from '../components/UI/Modal';
 import FoodCreator from '../components/FoodRecipes/Creators/FoodCreator';
 import RecipeCreator from '../components/FoodRecipes/Creators/RecipeCreator';
 import ChooseItem from '../components/FoodRecipes/Creators/ChooseItem';
-import ServingCreator from '../components/FoodRecipes/Creators/ServingCreator';
+//import ServingCreator from '../components/FoodRecipes/Creators/ServingCreator';
 import styled from 'styled-components';
 import * as actionTypes from '../store/actions';
 
@@ -44,7 +44,9 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
     const [chooseItem, setChooseItem] = useState(false);
     const [showFoodCreator, setShowFoodCreator] = useState(false);
     const [showRecipeCreator, setShowRecipeCreator] = useState(false);
-    const [addServing, setAddServing] = useState(false);
+    const [editingItem, setEditingItem] = useState(false);
+    const [itemEditing, setItemEditing] = useState(null);
+    //const [addServing, setAddServing] = useState(false);
 
 
     useEffect(() => {
@@ -67,57 +69,87 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
         });
     },[onRetrieveFood, onRetrieveRecipes]);
 
+    // Called when an item from foodList is clicked
     const foodRecipeClicked = (item) => {
         console.log('clicked', item);
     };
 
+    // Called when add new food/recipe btn is clicked (setNewFoodRecipe)
+    // Should pop up the modal with Food and Recipe buttons (setChooseItem)
     const newFoodRecipeHandler = () => {
         setNewFoodRecipe(true);
         setChooseItem(true);
     };
 
+    // Cancels the new choice if modal background is clicked
     const cancelNewFoodRecipe = () => {
+        setChooseItem(false);
+        setEditingItem(false);
+        setItemEditing(null);
         setNewFoodRecipe(false);
         setShowFoodCreator(false);
         setShowRecipeCreator(false);
-
     };
 
-    const foodOrRecipeChosen = (item) => {
+    // Called when either Food btn or Recipe btn is chosen
+    // after setChooseItem opens the modal
+    // Modal stays open but changes to either food or recipe creator
+    const foodOrRecipeChosen = (itemType) => {
         //console.log(item);
-        if(item === 'food'){
+        if(itemType === 'food'){
             setShowFoodCreator(true);
         }else {
             setShowRecipeCreator(true);
         }
         setChooseItem(false);
-
     }
+
+    // Called if the back btn is clicked from either the
+    // foodCreator or recipeCreator. It brings the chooseItem
+    // back up within the modal but keeps it open. 
     const backHandler = () => {
-        setChooseItem(true);
+        console.log("editingItem", editingItem)
         setShowFoodCreator(false);
         setShowRecipeCreator(false);
+        if (editingItem){
+            setEditingItem(false);
+            setItemEditing(null);
+        }else{
+            setChooseItem(true);
+        }
     };
 
-    const showAddServingHandler = () => {
-        //used for ServingCreator (outside modal version)
-        //setAddServing(prev => !prev);
-    }
+    // const showAddServingHandler = () => {
+    //     //used for ServingCreator (outside modal version)
+    //     //setAddServing(prev => !prev);
+    // }
+
+    const editItemHandler = (item) => {
+        console.log("item editing", item)
+        if (item.type === 'recipe'){
+            setShowRecipeCreator(true);
+        }else {
+            setShowFoodCreator(true);
+        } 
+        setEditingItem(true);
+        setChooseItem(false);
+        setItemEditing(item)
+    };
     
 
     const foodAndRecipes = [...storedFood, ...storedRecipes]; 
 
     return (
         <div>
-            <Modal show={newFoodRecipe} modalClosed={cancelNewFoodRecipe}> 
+            <Modal show={newFoodRecipe || editingItem} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
-                <FoodCreator showCreator={showFoodCreator} backHandler={backHandler} />
-                <RecipeCreator show={showRecipeCreator} backHandler={backHandler} addServ={showAddServingHandler}/>
+                {showFoodCreator ? <FoodCreator showCreator={showFoodCreator} backHandler={backHandler} initialItem={itemEditing} /> : null}
+                {showRecipeCreator ? <RecipeCreator showCreator={showRecipeCreator} backHandler={backHandler} /> : null}
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>
             </ItemDiv>
-            <ItemList items={foodAndRecipes} clicked={item => foodRecipeClicked(item)}/>
+            <ItemList items={foodAndRecipes} clicked={item => foodRecipeClicked(item)} editItem={editItemHandler}/>
         </div>
     );
     

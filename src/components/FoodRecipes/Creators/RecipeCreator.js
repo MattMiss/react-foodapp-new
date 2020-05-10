@@ -1,23 +1,22 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import Modal from '../../UI/Modal';
-import CategoryGrid from './CategoryGrid';
-import Servings from './Servings';
+import ModalInner from '../../UI/ModalInner';
 import Search from '../Searchers/Search';
-import styled from 'styled-components';
+import FoodSummary from './FoodSummary';
+import Servings from './Servings';
 import Directions from './Directions';
-import { Container, Row, Col } from 'react-bootstrap';
-//import axios from '../../../axios-food';
+import CategoryGrid from './CategoryGrid';
+import useInputForm from '../useInputForm';
+import {Container, Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
+import axios from '../../../axios-food';
+import styled from 'styled-components';
+import ServingCreator from './ServingCreator';
 
   
-const RecipeCreatorDiv = styled.div`
+const RecipeContainer = styled.div`
     margin: 20px auto;
-    padding: 10px 10px 20px 10px;
-    width: 95%;
     font-size: 12px;
-    border: 1px 1px #eee;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    max-width: 800px;
 `;
 
 const BtnDiv = styled.div`
@@ -34,6 +33,15 @@ const BtnDiv = styled.div`
         background-color: #182955;
         color: #00a5ff;
     }
+`;
+
+const AddDirectionDiv = styled.div`
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
+    border-radius: 3px;
+    padding: 5px;
+
 `;
 
 
@@ -62,154 +70,279 @@ const testServings = [{
     }
 }];
 
-const RecipeCreator = (props) => {
+const RecipeCreator = ( {showCreator, backHandler} ) => {
 
+    const [currentRecipe, setCurrentRecipe] = useState(null);
     const [saving, setSaving] = useState(false);
-    const [servings, setServings] = useState(testServings);
-    const [selectCategory, setSelectCategory] = useState(false);
-    const [loadingCat, setLoadingCat] = useState(false);
-    const [category, setCategory] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [addServing, setAddServing] = useState(false);
+    const [selectCategory, setSelectCategory] = useState(false);
+    const [category, setCategory] = useState(null);
+    const [servings, setServings] = useState([]);
+    const [currentServing, setCurrentServing] = useState(null);
     const [servingError, setServingError] = useState(null);
+    const [error, setError] = useState(null);
     const [searchRecipe, setSearchRecipe] = useState(false);
+    const [clearSearch, setClearSearch] = useState(false);
+    const [directions, setDirections] = useState([]);
+    const [addDirection, setAddDirection] = useState(false);
 
+    const recipeNameRef = useRef(null);
+    const recipeDescRef = useRef(null);
+    const recipeServingSizeRef = useRef(null);
+    const recipePrepTimeRef = useRef(null);
+    const recipeCookTimeRef = useRef(null);
 
+    const saveRecipeHandler = () => {
+        console.log(fields);
+    };
 
+    const {fields, handleInputChange, handleSubmit} = useInputForm(saveRecipeHandler);
 
-    const handleSubmit = (event) => {
-        event.preventDefault(); 
-        console.log(event);
+    const handleSave = () => {
+        const recipeCheck = recipeNameRef.current.value && 
+                            recipeDescRef.current.value &&
+                            recipeServingSizeRef.current.value &&
+                            recipePrepTimeRef.current.value &&
+                            recipeCookTimeRef.current.value &&
+                            servings.length > 0;
+                   
+        if (recipeCheck){
+            const recipe = {
+                name : recipeNameRef.current.value,
+                description : recipeDescRef.current.value,
+                servingSize : recipeServingSizeRef.current.value,
+                prepTime : recipePrepTimeRef.current.value,
+                cookTime : recipeCookTimeRef.current.value,
+                servings : servings          
+            }
+    
+            setSaving(true); 
+            setAddServing(false);
+            setCurrentRecipe(recipe);
+        }else{
+            setError(true);
+        }
+           
     }
 
-    const categoryHandler = () => {
-        setSelectCategory(true);    
+    const recipeSaveContinueHandler = () => {
+        setLoading(true);
+
+        axios.post('/recipe-items.json', currentRecipe)
+            .then(response => {
+                setLoading(false);
+                setSaving(false);
+                //this.loadFoods()
+            })
+            .catch(error => {
+                setLoading(false);
+                setSaving(false); 
+            });
     }
 
-    const categorySelectedHandler = (cat) => {
-        setCategory(cat);
-        setSelectCategory(false);
+    const recipeSaveCancelHandler = () => {
+        setSaving(false);
     }
 
-    const chooseCatCancelHandler = () => {
-        setSelectCategory(false);
-    }
-
-    // let foodSummary = null;
-
-    // if (this.state.currentFood){
-    //     foodSummary = <FoodSummary 
-    //         food={this.state.currentFood}
-    //         foodSaveCancelled ={this.foodSaveCancelHandler}
-    //         foodSaveContinued = {this.foodSaveContinueHandler}/>
-    // }
-
-    // if (this.state.loading) {
-    //     foodSummary = <Spinner />
-    // }
-
+    const addServingHandler = () => {
+        setAddServing(prev => !prev);
+    };
 
     const saveServingHandler = (serving) => {
         const newServing = {
-            "servingSize" : serving.servingSize,
-            "servingSizeDesc" : serving.servingSizeDesc,
-            "metricSize" : serving.metricSize,
-            "metricSizeDesc" : serving.metricSizeDesc,
-            "nutrients" : {
-                "calcium" : serving.calcium,
-                "calories" : serving.calories,
-                "carbs" : serving.totalCarbs,
-                "cholesterol" : serving.cholesterol,
-                "fat" : serving.totalFat,
-                "fiber" : serving.fiber,
-                "iron" : serving.iron,
-                "mono-unsat-fat" : serving.monoFat,
-                "poly-unsat-fat" : serving.polyFat,
-                "potassium" : serving.potassium,
-                "protein" : serving.protein,
-                "sat-fat" : serving.saturatedFat,
-                "sodium" : serving.sodium,
-                "sugars" : serving.sugars,
-                "vitamin-a" : serving.vitaminA,
-                "vitamin-c" : serving.vitaminC
+            servingSize : serving.servingSize,
+            servingSizeDesc : serving.servingSizeDesc,
+            metricSize : serving.metricSize,
+            metricSizeDesc : serving.metricSizeDesc,
+            nutrients : {
+                calcium : serving.calcium,
+                calories : serving.calories,
+                carbs : serving.totalCarbs,
+                cholesterol : serving.cholesterol,
+                fat : serving.totalFat,
+                fiber : serving.fiber,
+                iron : serving.iron,
+                monoFat : serving.monoFat,
+                polyFat : serving.polyFat,
+                potassium : serving.potassium,
+                protein : serving.protein,
+                saturatedFat : serving.saturatedFat,
+                sodium : serving.sodium,
+                sugars : serving.sugars,
+                vitaminA : serving.vitaminA,
+                vitaminC : serving.vitaminC
             }           
         }
         console.log(newServing)
         // //Add new serving to old servings array
-        const allServings = [servings, newServing]
+        const allServings = [...servings, newServing]
 
         setServings(allServings)
+        setAddServing(false);
+    }; 
+
+    const addDirectionHandler = () => {
+        setAddDirection(prev => !prev);
     };
 
     const servingErrorHandler = () => {
         setServingError(true);
     };
 
-    const servingErrorCancelHandler = () => {
+    const errorCancelHandler = () => {
         setServingError(false);
+        setError(false);
     };
 
     const searchRecipeHandler = () => {
         setSearchRecipe(prev => !prev);
+        setClearSearch(prev => !prev);   
     }
 
-    const title = props.show ? <div>
+
+    const categorySelectedHandler = (cat) => {
+        setCategory(cat);
+        setSelectCategory(false);
+    }
+
+    const chosenItemHandler = (item) => {
+        // TODO: Add item to boxes
+        console.log(item)
+        setSearchRecipe(false);
+        setClearSearch(prev => !prev);   
+
+        const srv = item.serving_sizes.serving;
+
+        fields.recipeName = item.recipe_name;
+        recipeNameRef.current.value = item.recipe_name;
+        fields.description = item.recipe_description;
+        recipeDescRef.current.value = item.recipe_description;
+        fields.servingSize = srv.serving_size;
+        recipeServingSizeRef.current.value = srv.serving_size;
+        fields.prepTime = srv.prep_time;
+        recipePrepTimeRef.current.value = srv.prep_time;
+        fields.cookTime = srv.cook_time; 
+        recipeCookTimeRef.current.value = srv.cook_time;  
+        
+
+        const newTempServing = {
+            servingSize : item.number_of_servings,
+            servingSizeDesc : srv.serving_size,
+            nutrients : {
+                calcium : srv.calcium,
+                calories : srv.calories,
+                carbs : srv.carbohydrate,
+                cholesterol : srv.cholesterol,
+                fat : srv.fat,
+                fiber : srv.fiber,
+                iron : srv.iron,
+                monoFat : srv.monounsaturated_fat,
+                polyFat : srv.polyunsaturated_fat,
+                potassium : srv.potassium,
+                protein : srv.protein,
+                saturatedFat : srv.saturated_fat,
+                sodium : srv.sodium,
+                sugars : srv.sugar,
+                transFat: srv.trans_fat,
+                vitaminA : srv.vitamin_a,
+                vitaminC : srv.vitamin_c
+            }
+        }
+
+        setServings([newTempServing]);
+        setDirections(item.directions.direction)
+    };
+
+    const directionAddedHandler = () => {
+        const newDirection = { direction_description : fields.addDirection, direction_number : directions.length + 1 }
+        setDirections([...directions, newDirection])
+    };
+    
+    const title = <div>
         <h2>Add a Recipe</h2>
-    </div> : null;
+    </div>;
 
-    const searchBtnDiv = props.show ? <BtnDiv onClick={searchRecipeHandler}>
-        <Container>
-            <Row>
-                <Col>
-                    Search Online
-                </Col>
-            </Row>
-        </Container>
-    </BtnDiv> : null;
 
-    const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : null
+    const searchBtnDiv = <BtnDiv onClick={searchRecipeHandler}>
+    <Container>
+        <Row>
+            <Col>
+                Search Online
+            </Col>
+        </Row>
+    </Container>
+    </BtnDiv>;
+
+    const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : <div>No Servings</div>
     const categoryChosen = category ? <span>{category}</span> : <span>Choose a Category</span>
 
     // only show the creator is props.show is true
-    const recipeCreator = props.show ? <RecipeCreatorDiv>
-        <form onSubmit={handleSubmit}>
-            <div className=" row align-items-center my-2"> 
+    const recipeContainer = <RecipeContainer>
+        <Container>
+            <Row className="form-group align-items-center"> 
                 <label htmlFor="recipeName" className="form-label col-sm-2">Recipe Name</label>
-                <div className="col">
-                    <input type="text" className="form-control" id="recipeName"/> 
-                </div>  
-            </div>
-            <div className=" row align-items-center"> 
+                <Col>
+                    <InputGroup size="sm">
+                        <FormControl
+                            aria-label="Recipe Name"
+                            id="recipeName"
+                            onChange={handleInputChange}
+                            ref={recipeNameRef}
+                            />
+                    </InputGroup>
+                </Col>
+            </Row>
+            <Row className="form-group align-items-center"> 
                 <label htmlFor="description" className="form-label col-sm-2">Description</label>
-                <div className="col">
-                    <input type="text" className="form-control" id="description"/> 
-                </div>  
-            </div>  
-            <div className=" row my-2"> 
-                <div className="col">
-                    <div className="row align-items-center">
-                        <label htmlFor="servings" className="form-label col">Servings</label>
-                        <div className="col">
-                            <input type="text" className="form-control" id="servings"/> 
-                        </div> 
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="row align-items-center">
-                        <label htmlFor="prepTime" className="form-label col">Prep Time</label>
-                        <div className="col">
-                            <input type="text" className="form-control" id="prepTime"/> 
-                        </div>
-                    </div>    
-                </div>
-                <div className="col">
-                    <div className="row align-items-center">
-                        <label htmlFor="cookTime" className="form-label col">Cook Time</label>
-                        <div className="col">
-                            <input type="text" className="form-control" id="cookTime"/> 
-                        </div>
-                    </div> 
-                </div>    
-            </div>
+                <Col>
+                    <InputGroup size="sm">
+                        <FormControl
+                            aria-label="Description"
+                            id="description"
+                            onChange={handleInputChange}
+                            ref={recipeDescRef}
+                            />
+                    </InputGroup>
+                </Col>
+            </Row>
+            <Row className="align-items-center"> 
+                <label htmlFor="servings" className="form-label col px-1">Servings</label>
+                <Col className="px-1">
+                    <InputGroup size="sm">
+                        <FormControl
+                            aria-label="Servings"
+                            id="servings"
+                            onChange={handleInputChange}
+                            ref={recipeServingSizeRef}
+                            />
+                    </InputGroup>
+                </Col>
+                <label htmlFor="prepTime" className="form-label col px-1">Prep Time</label>
+                <Col className="px-1">
+                    <InputGroup size="sm">
+                        <FormControl
+                            aria-label="Prep Time"
+                            id="prepTime"
+                            onChange={handleInputChange}
+                            ref={recipePrepTimeRef}
+                            />
+                    </InputGroup>
+                </Col>
+                <label htmlFor="cookTime" className="form-label col px-1">Cook Time</label>
+                <Col className="px-1">
+                    <InputGroup size="sm">
+                        <FormControl
+                            aria-label="Cook Time"
+                            id="cookTime"
+                            onChange={handleInputChange}
+                            ref={recipeCookTimeRef}
+                            />
+                    </InputGroup>
+                </Col>
+            </Row>
+             
+            
             <div className=" row align-items-center justify-content-center"> 
                 <label htmlFor="category" className="form-label col-sm-2">Category</label>
                 <div className="col-4">
@@ -220,30 +353,66 @@ const RecipeCreator = (props) => {
                         type="button" 
                         className="btn btn-primary btn-sm" 
                         id="description"
-                        onClick={categoryHandler}>{category === null ? 'Choose' : 'Change'}</button> 
+                        onClick={() => setSelectCategory(true)}>{category === null ? 'Choose' : 'Change'}</button> 
                 </div>  
             </div> 
 
             <hr />
             <div>
-                <h5>Servings</h5>
+                <center><h5>Servings</h5></center>
             </div>
             
             {servingsContainer}
-            {/* <ServingCreator show={true} saveServingHandler={serving => saveServingHandler(serving)} errorHandler={servingErrorHandler}/> */}
 
-            <div className="row">
-                <div className="col">
-                    <BtnDiv onClick={props.addServ}>
+            <Row>
+                <Col>
+                    <BtnDiv onClick={addServingHandler}>
                         {!addServing ? 'Add Serving' : 'Cancel'}
                     </BtnDiv>
-                </div>
-            </div>
+                </Col>
+            </Row>
         
             <hr />
 
-            <span>Directions</span>
-            <Directions />
+            <div>
+                <center><h5>Directions</h5></center>
+            </div>
+
+            <Directions directions={directions}/>
+
+            <Row>
+                <Col>
+                    {!addDirection ? 
+                    <BtnDiv onClick={addDirectionHandler}>
+                        Add direction
+                    </BtnDiv> :
+                    <AddDirectionDiv>
+                        <Row>
+                            <Col xs={9}>
+                                <InputGroup size="sm">
+                                    <FormControl
+                                        aria-label="Add a Direction"
+                                        id="addDirection"
+                                        placeholder={`Enter Direction ${directions.length + 1}`}
+                                        onChange={handleInputChange}
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col xs={3}>
+                                <Row className="no-gutters">
+                                     <Col>
+                                        <Button size="sm" onClick={directionAddedHandler} variant="success">Add</Button>
+                                     </Col>
+                                     <Col>
+                                        <Button size="sm" onClick={() => setAddDirection(false)} variant="danger">Cancel</Button>
+                                     </Col>
+                                </Row>
+                                
+                            </Col>
+                        </Row>     
+                    </AddDirectionDiv>}
+                </Col>
+            </Row>
 
             <hr />
 
@@ -251,34 +420,52 @@ const RecipeCreator = (props) => {
                 <label htmlFor="notes" className="form-label col">Notes</label> 
             </div>
             <div className=" row-8 align-items-center my-2"> 
-                <textarea type="text" className="form-control" id="notes" rows="4"></textarea> 
+                <textarea type="text" className="form-control" id="notes" rows="4" onChange={handleInputChange}></textarea> 
             </div>
+            
+            <button className="btn btn-sm btn-block btn-success" onClick={handleSave}>Save Food</button>
+        </Container>
+    </RecipeContainer>;
 
-            <button className="btn btn-sm btn-block btn-success mt-4" type='submit'>Save Recipe</button>
-        </form>
-    </RecipeCreatorDiv> : null;
+    
 
-    const backButtons = props.show ? <button className="btn btn-sm btn-block btn-danger" type='button' onClick={props.backHandler}>Back</button> : null;
 
-    return (
-        <Fragment>
-            <Modal show={selectCategory} modalClosed={chooseCatCancelHandler}>
-                <CategoryGrid selected={cat => categorySelectedHandler(cat)}/>
-            </Modal>
-            <Modal show={servingError} modalClosed={servingErrorCancelHandler}>
-                <p>Error</p>
-            </Modal>
-            <Modal show={searchRecipe} modalClosed={searchRecipeHandler}>
-                <Search isRecipe={true}/>
-            </Modal>
+    const backButtons = <button className="btn btn-sm btn-block btn-danger" type='button' onClick={backHandler}>Back</button>;
+
+    // Is showCreator prop is true, mainContent will either be
+    // the foodCreator or the serving creator (if addServing is true)
+    const mainContent = !addServing ? <>
             {title}
             {searchBtnDiv}
-            {recipeCreator}
+            {recipeContainer}
             {backButtons}
-        </Fragment>
+        </> : <>
+            <ServingCreator 
+                show={true} 
+                cancel={() => setAddServing(false)} 
+                saveServing={serv => saveServingHandler(serv)}
+                error={servingErrorHandler}/>
+        </>;
+
+
+    return (
+        <>
+            <Modal show={selectCategory} modalClosed={() => setSelectCategory(false)}>
+                <CategoryGrid selected={cat => categorySelectedHandler(cat)}/>
+            </Modal>
+            <Modal show={servingError || error} modalClosed={errorCancelHandler}>
+                <p>Error</p>
+            </Modal>
+            <ModalInner show={searchRecipe} modalClosed={searchRecipeHandler}>
+                <Search isRecipe={true} clear={clearSearch} chosenItem={item => chosenItemHandler(item)}/>
+            </ModalInner>
+            
+            {showCreator && !saving ? mainContent : null}
+            <FoodSummary item={currentRecipe} showSummary={saving && currentRecipe} cancelSave={recipeSaveCancelHandler} continueSave={recipeSaveContinueHandler}/>
+        </>
+
     );
-    
-    
+      
 };
 
 export default RecipeCreator;

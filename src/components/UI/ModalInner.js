@@ -14,7 +14,7 @@ const Modal = styled.div`
     box-sizing: border-box;
     transition: all 0.3s ease-out;
     overflow-y: auto;
-    z-index: 20;
+    z-index: 300;
 `;
 
 const Backdrop = styled.div`
@@ -22,23 +22,23 @@ const Backdrop = styled.div`
     height: 100%;
     margin-top: -4px;
     position: absolute;
-    z-index: 10;
+    z-index: 200;
     
     background-color: rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-out;
 `;
 
-const ModalInner = ( {show, children, backdropClicked} ) => {
+const ModalInner = ( {show, children, modalClosed} ) => {
 
     console.log(show)
     return (
         <>
-            {<Backdrop onClick={backdropClicked}
+            <Backdrop onClick={modalClosed}
                 style = {{
                     pointerEvents: show ? "auto" : "none",
                     opacity: show ? '1' : '0',
                     
-                }}/> }
+                }}/> 
             <Modal
                 style = {{
                     pointerEvents: show ? "auto" : "none",

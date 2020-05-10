@@ -6,6 +6,15 @@ import { Row, Col, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 
 const ServingContainer = styled.div`
     padding: 10px 5px 10px 5px;
+    font-size: .7rem;
+
+    input, .input-group-text {
+        font-size: .7rem !important;
+    }
+
+    .form-group {
+        margin-bottom: .5rem;
+    }
 `;
 
 

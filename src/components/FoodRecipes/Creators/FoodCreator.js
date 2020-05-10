@@ -1,13 +1,12 @@
 import React, { useState, useRef } from 'react';
 
 import Modal from '../../UI/Modal';
-//import FoodSummary from '../FoodSummary/FoodSummary';
-import FoodRecipeItem from '../FoodRecipeItem/FoodRecipeItem';
+import ModalInner from '../../UI/ModalInner';
 import Search from '../Searchers/Search';
 import FoodSummary from './FoodSummary';
 import Servings from './Servings';
 import useInputForm from '../useInputForm';
-import {Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
+import {Container, Row, Col, InputGroup, FormControl, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import axios from '../../../axios-food';
 import styled from 'styled-components';
 import ServingCreator from './ServingCreator';
@@ -34,15 +33,15 @@ const BtnDiv = styled.div`
     }
 `;
 
-const FoodCreator = ( {showCreator, backHandler} ) => {
+const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
     
     const [currentFood, setCurrentFood] = useState(null);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(false);
     const [addServing, setAddServing] = useState(false);
     const [showBrand, setShowBrand] = useState(true);
-    const [servings, setServings] = useState([]);
-    const [currentServing, setCurrentServing] = useState(null);
+    const [servings, setServings] = useState(initialItem ? initialItem.servings : []);
+    //const [currentServing, setCurrentServing] = useState(null);
     const [servingError, setServingError] = useState(null);
     const [error, setError] = useState(null);
     const [searchFood, setSearchFood] = useState(false);
@@ -50,6 +49,7 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
 
     const foodNameRef = useRef(null);
     const brandNameRef = useRef(null);
+    const notesRef = useRef(null);
 
     const saveFoodHandler = () => {
         console.log(fields);
@@ -63,11 +63,14 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
         if (foodCheck){
             const food = {
                 name : foodNameRef.current.value,
-                type : showBrand ? 'brand' : 'generic',
+                food_type : showBrand ? 'brand' : 'generic',
+                brand_name : showBrand ? brandNameRef.current.value : "",
+                type: "food",
+                notes : notesRef ? notesRef.current.value : "",
                 servings : servings          
             }
-            if (showBrand){
-                food.brand = brandNameRef.current.value;
+            if (initialItem){
+                food.id = initialItem.id;
             }
     
             setSaving(true); 
@@ -82,18 +85,49 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
     
 
     const foodSaveContinueHandler = () => {
-        setLoading(true);
+        //setLoading(true);
+        console.log("Saving")
+        console.log(currentFood)
+        
+        return (
+            initialItem ? axios.put('/food-items/' + currentFood.id + '.json', currentFood)
+                .then(response => {
+                    setLoading(false);
+                    setSaving(false);
+                    //this.loadFoods()
+                })
+                .catch(error => {
+                    setLoading(false);
+                    setSaving(false); 
+                }) 
+                : 
+                axios.post('/food-items.json', currentFood)
+                .then(response => {
+                    setLoading(false);
+                    setSaving(false);
+                    //this.loadFoods()
+                })
+                .catch(error => {
+                    setLoading(false);
+                    setSaving(false); 
+                })
 
-        axios.post('/food-items.json', currentFood)
-            .then(response => {
-                setLoading(false);
-                setSaving(false);
-                //this.loadFoods()
-            })
-            .catch(error => {
-                setLoading(false);
-                setSaving(false); 
-            });
+        )
+        
+
+
+            
+        // axios.post(`{/food-items/${currentFood.id}}`, currentFood, config)
+        // .then(response => {
+        //     console.log(response)
+        //     setLoading(false);
+        //     setSaving(false);
+        //     //this.loadFoods()
+        // })
+        // .catch(error => {
+        //     setLoading(false);
+        //     setSaving(false); 
+        // });
     }
 
     const foodSaveCancelHandler = () => {
@@ -221,52 +255,28 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
         
     };
 
-    let foodSummary = null;
-
-    const addFieldsTest = () => {
-        fields.foodName = "Burger";
-        foodNameRef.current.value = "Burger"
-    };
-
-    // if (currentFood){
-    //     foodSummary = <div >
-    //         <FoodRecipeItem item={currentFood} clicked={item => console.log(item)}/>
-    //         <Container>
-    //             <Row>
-    //                 <Col>
-    //                     <button className="btn btn-sm btn-block btn-danger" onClick={foodSaveCancelHandler}>No</button>
-    //                 </Col>
-    //                 <Col>
-    //                     <button className="btn btn-sm btn-block btn-success" onClick={foodSaveContinueHandler}>Yes</button>
-    //                 </Col>
-    //             </Row>
-    //         </Container>
-    //     </div>
-        
-        
-    // }
-
-
     const title = <div>
         <h2>Add a Food</h2>
     </div>;
 
 
-    const brandContainer = <div className="row" id="brandNameContainer">
-            <Row className="justify-content-right">
-                <label htmlFor="brandName" className="form-label col-sm-4">Brand Name</label>
-                <Col xs={8}>
+    const brandContainer = <Row className="justify-content-right" id="brandNameContainer">
+                <Col xs={3}>
+                    <label htmlFor="brandName" className="form-label">Brand Name</label>
+                </Col>
+                
+                <Col xs={5}>
                     <InputGroup size="sm">
                         <FormControl
                             aria-label="Brand Name"
                             id="brandName"
                             onChange={handleInputChange}
                             ref={brandNameRef}
+                            defaultValue={initialItem ? initialItem.brand: ""}
                             />
                     </InputGroup>
                 </Col>
-            </Row>         
-    </div>;
+            </Row>;
 
     const searchBtnDiv = <BtnDiv onClick={searchFoodHandler}>
         <Container>
@@ -279,40 +289,39 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
     </BtnDiv>;
 
     const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : <div>No Servings</div>
-
     
+
     // creatorContent will be either FoodContainer or ServingCreator based on addServing
     const foodContainer = <FoodContainer >
             <Container>
                 <Row className="form-group align-items-center"> 
-                    <label htmlFor="foodName" className="form-label col-sm-2">Food Name</label>
-                    <Col sm={4}>
+                    <Col sm={3}>
+                        <label htmlFor="foodName" className="form-label">Food Name</label>
+                    </Col>
+                    <Col sm={5}>
                         <InputGroup size="sm">
                             <FormControl
                                 aria-label="Food Name"
                                 id="foodName"
                                 onChange={handleInputChange}
                                 ref={foodNameRef}
+                                defaultValue={initialItem ? initialItem.name : ""}
                                 />
                         </InputGroup>
                     </Col>
-                    <Col sm={6}>
-                        <div className={"row align-items-center"}>
-                            <label htmlFor="type" className="form-label col-sm-4">Type</label> 
-                            <div className="btn-group btn-group-toggle col-sm-8" data-toggle="buttons">
-                                <label className="btn btn-sm btn-primary active">
-                                    <input type="radio" name="type" value="generic" defaultChecked onClick={() => brandHandler('generic')}/> Generic 
-                                </label>
-                                <label className="btn btn-sm btn-primary">
-                                    <input type="radio" name="type" value="brand" onClick={() => brandHandler('brand')}/> Brand 
-                                </label>
-                            </div>
-                        </div> 
-                    </Col>  
+                    <Col sm={1}>
+                        <label htmlFor="type" className="form-label">Type</label> 
+                    </Col>
+                    <Col sm={3}>
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={"brand"} size="sm">
+                            <ToggleButton value={"generic"} onClick={() => brandHandler('generic')} >generic</ToggleButton>
+                            <ToggleButton value={"brand"} onClick={() => brandHandler('brand')} >brand</ToggleButton>
+                        </ToggleButtonGroup>
+                    </Col>   
                 </Row>
+
                 {showBrand ? brandContainer : null}  
 
-                <button className="btn btn-danger" onClick={addFieldsTest}>Fields</button>
 
                 <hr />
                 <div>
@@ -332,12 +341,24 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
             
                 <hr />
 
-                <div className=" row align-items-center my-2">   
-                    <label htmlFor="notes" className="form-label col">Notes</label> 
-                </div>
-                <div className=" row-8 align-items-center my-2"> 
-                    <textarea type="text" className="form-control" id="notes" rows="4" onChange={handleInputChange}></textarea> 
-                </div>
+                <Row className="align-items-center my-2">  
+                    <Col>
+                        <label htmlFor="notes" className="form-label">Notes</label> 
+                    </Col> 
+                    
+                </Row>
+                <Row className="align-items-center my-2">
+                    <Col>
+                        <textarea 
+                            type="text" 
+                            className="form-control" 
+                            id="notes" 
+                            rows="4" 
+                            onChange={handleInputChange}
+                            ref={notesRef}>
+                        </textarea> 
+                    </Col> 
+                </Row>
                 
                 <button className="btn btn-sm btn-block btn-success" onClick={handleSave}>Save Food</button>
             </Container>
@@ -346,6 +367,8 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
 
     const backButtons = <button className="btn btn-sm btn-block btn-danger" type='button' onClick={backHandler}>Back</button>;
 
+    // Is showCreator prop is true, mainContent will either be
+    // the foodCreator or the serving creator (if addServing is true)
     const mainContent = !addServing ? <>
             {title}
             {searchBtnDiv}
@@ -359,16 +382,33 @@ const FoodCreator = ( {showCreator, backHandler} ) => {
                 error={servingErrorHandler}/>
         </>;
 
+    if (initialItem) {
+        console.log(initialItem)
+
+        fields.foodName = initialItem.name;
+        if (initialItem.brand && initialItem.brand.length > 0){
+            fields.brandName = initialItem.brand;
+        }
+        
+    }
+
     return (
         <>
             <Modal show={servingError || error} modalClosed={errorCancelHandler}>
                 <p>Error</p>
             </Modal>
-            <Modal show={searchFood} modalClosed={searchFoodHandler}>
+            <ModalInner show={searchFood} modalClosed={searchFoodHandler}>
                 <Search isRecipe={false} clear={clearSearch} chosenItem={item => chosenItemHandler(item)}/>
-            </Modal>
-            {showCreator && !saving ? mainContent : null}
-            <FoodSummary item={currentFood} showSummary={saving && currentFood} cancelSave={foodSaveCancelHandler} continueSave={foodSaveContinueHandler}/>
+            </ModalInner>
+            <ModalInner show={saving && currentFood} modalClosed={foodSaveCancelHandler}>
+                <FoodSummary 
+                    item={currentFood} 
+                    showSummary={saving && currentFood} 
+                    cancelSave={foodSaveCancelHandler} 
+                    continueSave={foodSaveContinueHandler}
+                />
+            </ModalInner>
+            {showCreator ? mainContent : null}
         </>
     );
 }

@@ -1,11 +1,14 @@
 import React from 'react';
-import FoodRecipeItem from '../FoodRecipeItem/FoodRecipeItem';
+import FoodRecipeItemTest from '../FoodRecipeItem/FoodRecipeItemTest';
 import {Container, Row, Col } from 'react-bootstrap';
 
 const FoodSummary = ({showSummary, item, cancelSave, continueSave}) => {
-    console.log(showSummary)
+    console.log(item)
+
+    
+
     const summary = showSummary ? <div >
-        <FoodRecipeItem item={item} clicked={item => console.log(item)}/>
+        <FoodRecipeItemTest item={item} clicked={item => console.log(item)}/>
         <Container>
             <Row>
                 <Col>

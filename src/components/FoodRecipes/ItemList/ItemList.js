@@ -10,15 +10,15 @@ const ItemListDiv = styled.div`
     cursor: pointer;
 `;
 
-const itemList = (props) => {
+const itemList = ( {items, clicked, editItem} ) => {
 
     const clickedHandler = (item) => {
-        props.clicked(item);
+        clicked(item);
     }
 
-    let allItems = props.items.map((result, index) => {
+    let allItems = items.map((result, index) => {
         //console.log(result)
-        return <FoodRecipeItemTest key={result.id} item={result} clicked={() => clickedHandler(result)}/>;   
+        return <FoodRecipeItemTest key={result.id} item={result} clicked={() => clickedHandler(result)} editItem={editItem}/>;   
     })
       
 
