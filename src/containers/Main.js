@@ -144,7 +144,7 @@ const Main = React.memo(({storedFood, storedRecipes, onRetrieveFood, onRetrieveR
             <Modal show={newFoodRecipe || editingItem} modalClosed={cancelNewFoodRecipe}> 
                 <ChooseItem show={chooseItem} clicked={item => foodOrRecipeChosen(item)} />
                 {showFoodCreator ? <FoodCreator showCreator={showFoodCreator} backHandler={backHandler} initialItem={itemEditing} /> : null}
-                {showRecipeCreator ? <RecipeCreator showCreator={showRecipeCreator} backHandler={backHandler} /> : null}
+                {showRecipeCreator ? <RecipeCreator showCreator={showRecipeCreator} backHandler={backHandler} initialItem={itemEditing}/> : null}
             </Modal>
             <ItemDiv>
                 <AddBtn onClick={newFoodRecipeHandler}> Add food / recipe</AddBtn>

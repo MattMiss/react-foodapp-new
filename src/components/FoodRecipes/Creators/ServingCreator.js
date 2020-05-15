@@ -22,8 +22,6 @@ const ServingCreator = (props) => {
 
     const saveServingHandler = () => {   
 
-        
-
         const allFieldsFilled = (Number(fields.servingSize) > 0 && Number(fields.servingSizeDesc.trim().length) > 0 
                                 && Number(fields.metricSize) > 0 && Number(fields.calories) > 0
                                 && Number(fields.totalFat) > 0 && Number(fields.saturatedFat) > 0

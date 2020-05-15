@@ -1,6 +1,7 @@
 import hmacsha1 from 'hmacsha1';
 import {stringify} from 'query-string';
 import axios from 'axios';
+axios.defaults.adapter = require('axios/lib/adapters/http');
 
 const API_PATH = 'https://platform.fatsecret.com/rest/server.api';
 const ACCESS_KEY = '34272aa80f904f7099c06d3ee92a37e6';
@@ -43,13 +44,25 @@ function makeApiCall(methodParams, httpMethod = 'GET') {
         data: null,
         error: null
     }
+    const config = {
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+      credentials: 'same-origin',
+    };
 
-    return axios.get(`${API_PATH}?${stringify(queryParams)}`)
+    return axios(`${API_PATH}?${stringify(queryParams)}`)
     .then(res => {
         return response.data = res;
     }).catch(err => {
         return response.error = err;
     })
+
+    return axios({ method: 'get', url: `${API_PATH}?${stringify(queryParams)} `, headers:{ 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' } })
 }
 
 export async function searchFood(query, maxResults = 50) {

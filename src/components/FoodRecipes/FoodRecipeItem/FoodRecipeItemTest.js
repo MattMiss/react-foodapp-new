@@ -4,7 +4,8 @@ import ReactCardFlip from 'react-card-flip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisV, faShare, faCaretLeft, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import axios from '../../../axios-food';
-import ItemFrontSide from './ItemFrontSide';
+import ItemFrontSideFood from './ItemFrontSideFood';
+import ItemFrontSideRecipe from './ItemFrontSideRecipe';
 import ItemBackSide from './ItemBackSide';
 import ModalInner from '../../UI/ModalInner';
 
@@ -22,9 +23,17 @@ const ItemDiv = styled.div`
     padding: 0.25em 40px 0.25em 0;
     overflow: hidden;
 
+    & hr {
+        border-top: 1px solid #00a5ff;
+    }
+
     &.recipe{
         border: 2px solid palevioletred;
         color: palevioletred;
+
+        & hr {
+        border-top: 1px solid palevioletred;
+        }
     }
 `
 
@@ -99,13 +108,20 @@ const FoodRecipeItemTest = ( {item, clicked, editItem} ) => {
                 </ModalInner>
                 <OptionsBtn onClick={() => setShowOptions(true)}><FontAwesomeIcon icon={faEllipsisV} /></OptionsBtn>
                 <ReactCardFlip isFlipped={showBackSide} flipDirection="horizontal" infinite={false}>
-                    <ItemFrontSide 
+
+                    {item.type === "food" ? <ItemFrontSideFood 
                         name = {item.name}
                         brand={item.food_type === "brand" ? item.brand_name : null}
                         type={item.type}
                         category={item.category}
                         description={item.description}
-                    />
+                    /> :
+                    <ItemFrontSideRecipe 
+                        name = {item.name}
+                        type={item.type}
+                        category={item.category}
+                        description={item.description}
+                    />}
                     
                    <ItemBackSide item={item}/>
 

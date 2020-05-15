@@ -6,14 +6,15 @@ const Modal = styled.div`
     position: absolute;
     background-color: white;
     width: 80%;
+    max-height: 80%;
     border: 1px solid #ccc;
     box-shadow: 1px 1px 1px black;
     padding: 16px;
     left: 10%;
-    top: 20%;
+    top: 10%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
-    overflow-y: auto;
+    overflow-y: scroll;
     z-index: 300;
 `;
 

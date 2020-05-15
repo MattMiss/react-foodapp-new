@@ -2,7 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 
 
-const ItemFrontSide = ({name, brand, type, category, description}) => (
+const ItemFrontSideFood = ({name, brand, type, category, description}) => (
     <Container>
         <Row>
             <Col className="text-left">
@@ -45,4 +45,4 @@ const ItemFrontSide = ({name, brand, type, category, description}) => (
     
 );
 
-export default ItemFrontSide;
+export default ItemFrontSideFood;

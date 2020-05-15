@@ -7,6 +7,8 @@ import FoodSummary from './FoodSummary';
 import Servings from './Servings';
 import useInputForm from '../useInputForm';
 import {Container, Row, Col, InputGroup, FormControl, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../../axios-food';
 import styled from 'styled-components';
 import ServingCreator from './ServingCreator';
@@ -20,16 +22,20 @@ const FoodContainer = styled.div`
 const BtnDiv = styled.div`
     text-align: center;
     font-size: 1.2em;
-    background-color: #00a5ff;
+    background-color: ${props => props.cancel ? 'palevioletred' : '#00a5ff'};
     color: white;
-    margin-top: 10px;
+    margin: 20px;
     border-radius: 3px;
     padding: 5px;
 
     &:hover {
         cursor: pointer;
-        background-color: #182955;
-        color: #00a5ff;
+        background-color: ${props => props.cancel ? '#a91b0d' : '#182955'};
+        color: ${props => props.cancel ? 'white' : '#00a5ff'};
+    }
+
+    &span {
+        margin: 0 5px;
     }
 `;
 
@@ -37,11 +43,9 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
     
     const [currentFood, setCurrentFood] = useState(null);
     const [saving, setSaving] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [addServing, setAddServing] = useState(false);
     const [showBrand, setShowBrand] = useState(true);
     const [servings, setServings] = useState(initialItem ? initialItem.servings : []);
-    //const [currentServing, setCurrentServing] = useState(null);
     const [servingError, setServingError] = useState(null);
     const [error, setError] = useState(null);
     const [searchFood, setSearchFood] = useState(false);
@@ -80,43 +84,33 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
             setError(true);
         }
            
-    }
-
-    
+    };
 
     const foodSaveContinueHandler = () => {
-        //setLoading(true);
         console.log("Saving")
         console.log(currentFood)
         
         return (
             initialItem ? axios.put('/food-items/' + currentFood.id + '.json', currentFood)
                 .then(response => {
-                    setLoading(false);
                     setSaving(false);
                     //this.loadFoods()
                 })
                 .catch(error => {
-                    setLoading(false);
                     setSaving(false); 
                 }) 
                 : 
                 axios.post('/food-items.json', currentFood)
                 .then(response => {
-                    setLoading(false);
                     setSaving(false);
                     //this.loadFoods()
                 })
                 .catch(error => {
-                    setLoading(false);
                     setSaving(false); 
                 })
 
         )
-        
-
-
-            
+     
         // axios.post(`{/food-items/${currentFood.id}}`, currentFood, config)
         // .then(response => {
         //     console.log(response)
@@ -128,13 +122,11 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
         //     setLoading(false);
         //     setSaving(false); 
         // });
-    }
+    };
 
     const foodSaveCancelHandler = () => {
         setSaving(false);
-    }
-
-
+    };
 
     const brandHandler = (foodType) => {
         switch (foodType){
@@ -151,9 +143,7 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
     const addServingHandler = () => {
         setAddServing(prev => !prev);
     };
-
-
-    
+ 
     const saveServingHandler = (serving) => {
         const newServing = {
             servingSize : serving.servingSize,
@@ -187,6 +177,10 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
         setAddServing(false);
     }; 
 
+    const removeServingHandler = (serving) => {
+
+    };
+
     const servingErrorHandler = () => {
         setServingError(true);
     };
@@ -199,8 +193,7 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
     const searchFoodHandler = () => {
         setSearchFood(prev => !prev);
         setClearSearch(prev => !prev);   
-    }
-
+    };
 
     const chosenItemHandler = (item) => {
         // TODO: Add item to boxes
@@ -255,17 +248,18 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
         
     };
 
+
+
     const title = <div>
         <h2>Add a Food</h2>
     </div>;
 
-
     const brandContainer = <Row className="justify-content-right" id="brandNameContainer">
-                <Col xs={3}>
+                <Col xs={2} className="px-1">
                     <label htmlFor="brandName" className="form-label">Brand Name</label>
                 </Col>
                 
-                <Col xs={5}>
+                <Col xs={6} className="px-1">
                     <InputGroup size="sm">
                         <FormControl
                             aria-label="Brand Name"
@@ -290,78 +284,121 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
 
     const servingsContainer = servings.length > 0 ? <Servings servings={servings} /> : <div>No Servings</div>
     
+    const AddMinusIcons = ({icon}) => (
+        <>
+            <FontAwesomeIcon icon={icon} />
+            <span className="mx-1">Serving</span>
+        </>  
+    );
 
     // creatorContent will be either FoodContainer or ServingCreator based on addServing
-    const foodContainer = <FoodContainer >
-            <Container>
-                <Row className="form-group align-items-center"> 
-                    <Col sm={3}>
-                        <label htmlFor="foodName" className="form-label">Food Name</label>
-                    </Col>
-                    <Col sm={5}>
-                        <InputGroup size="sm">
-                            <FormControl
-                                aria-label="Food Name"
-                                id="foodName"
-                                onChange={handleInputChange}
-                                ref={foodNameRef}
-                                defaultValue={initialItem ? initialItem.name : ""}
-                                />
-                        </InputGroup>
-                    </Col>
-                    <Col sm={1}>
-                        <label htmlFor="type" className="form-label">Type</label> 
-                    </Col>
-                    <Col sm={3}>
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={"brand"} size="sm">
-                            <ToggleButton value={"generic"} onClick={() => brandHandler('generic')} >generic</ToggleButton>
-                            <ToggleButton value={"brand"} onClick={() => brandHandler('brand')} >brand</ToggleButton>
-                        </ToggleButtonGroup>
-                    </Col>   
-                </Row>
+    const foodContainer = <FoodContainer>
+        <Container>
+          <Row className="form-group align-items-center">
+            <Col sm={2} className="px-1">
+              <label htmlFor="foodName" className="form-label">
+                Food Name
+              </label>
+            </Col>
+            <Col sm={6} className="px-1">
+              <InputGroup size="sm">
+                <FormControl
+                  aria-label="Food Name"
+                  id="foodName"
+                  onChange={handleInputChange}
+                  ref={foodNameRef}
+                  defaultValue={initialItem ? initialItem.name : ""}
+                />
+              </InputGroup>
+            </Col>
+            <Col sm={1}>
+              <label htmlFor="type" className="form-label">
+                Type
+              </label>
+            </Col>
+            <Col sm={3}>
+              <ToggleButtonGroup
+                type="radio"
+                name="options"
+                defaultValue={"brand"}
+                size="sm"
+              >
+                <ToggleButton
+                  value={"generic"}
+                  onClick={() => brandHandler("generic")}
+                >
+                  generic
+                </ToggleButton>
+                <ToggleButton
+                  value={"brand"}
+                  onClick={() => brandHandler("brand")}
+                >
+                  brand
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Col>
+          </Row>
 
-                {showBrand ? brandContainer : null}  
+          {showBrand ? brandContainer : null}
 
+          <hr />
+          <div>
+            <center>
+              <h5>Servings</h5>
+            </center>
+          </div>
 
-                <hr />
-                <div>
-                    <center><h5>Servings</h5></center>
-                </div>
-                
-                {servingsContainer}
+          {servingsContainer}
 
-                <Row>
-                    <Col>
-                        <BtnDiv onClick={addServingHandler}>
-                            {!addServing ? 'Add Serving' : 'Cancel'}
-                        </BtnDiv>
-                    </Col>
-                </Row>
-                
-            
-                <hr />
+          <Row className="justify-content-center">
+            <Col sm={8}>
+              <Row className="no-gutters">
+                {servings.length > 0 ? <Col>
+                  <BtnDiv cancel={true} onClick={removeServingHandler}>
+                      <AddMinusIcons icon={faMinus}/>
+                  </BtnDiv>
+                </Col> : null}
+                <Col>
+                  <BtnDiv onClick={addServingHandler}>
+                    {!addServing ? <>
+                        <AddMinusIcons icon={faPlus}/>
+                      </> : "Cancel"}
+                  </BtnDiv>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-                <Row className="align-items-center my-2">  
-                    <Col>
-                        <label htmlFor="notes" className="form-label">Notes</label> 
-                    </Col> 
-                    
-                </Row>
-                <Row className="align-items-center my-2">
-                    <Col>
-                        <textarea 
-                            type="text" 
-                            className="form-control" 
-                            id="notes" 
-                            rows="4" 
-                            onChange={handleInputChange}
-                            ref={notesRef}>
-                        </textarea> 
-                    </Col> 
-                </Row>
-                
-                <button className="btn btn-sm btn-block btn-success" onClick={handleSave}>Save Food</button>
-            </Container>
+          <hr />
+
+          <Row className="align-items-center my-2">
+            <Col>
+              <label htmlFor="notes" className="form-label">
+                Notes
+              </label>
+            </Col>
+          </Row>
+          <Row className="align-items-center my-2">
+            <Col>
+              <textarea
+                type="text"
+                className="form-control"
+                id="notes"
+                rows="2"
+                onChange={handleInputChange}
+                ref={notesRef}
+                defaultValue={initialItem ? initialItem.notes : ""}
+              ></textarea>
+            </Col>
+          </Row>
+
+          <button
+            className="btn btn-sm btn-block btn-success"
+            onClick={handleSave}
+          >
+            Save Food
+          </button>
+        </Container>
     </FoodContainer>;
 
 
@@ -389,6 +426,8 @@ const FoodCreator = ( {showCreator, backHandler, initialItem} ) => {
         if (initialItem.brand && initialItem.brand.length > 0){
             fields.brandName = initialItem.brand;
         }
+        fields.description = initialItem.description;
+        fields.notes = initialItem.notes;
         
     }
 

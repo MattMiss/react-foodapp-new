@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import useInputForm from '../useInputForm';
-import { InputGroup, FormControl, Container, Row, Col } from 'react-bootstrap';
+import { InputGroup, FormControl, Container } from 'react-bootstrap';
 import FoodRecipeResult from './FoodRecipeResult';
 import FoodRecipeFullResult from './FoodRecipeFullResult';
 import {searchFood, searchRecipe, getRecipe, getFood} from './FatSecret';
-import axios from 'axios';
+
+
 
 const Search = (props) => {
 
@@ -28,8 +29,9 @@ const Search = (props) => {
             }) 
         }else{
             searchFood(fields.searchName).then(result => {
-                console.log(result.data.foods.food)
-                if(result.data.foods.food){
+                console.log(result)
+                if(result.data && result.data.foods.food){
+                    
                     setFoodSearchResults(result.data.foods.food);
                 }
             }) 
@@ -91,25 +93,26 @@ const Search = (props) => {
         setShowSearchArea(true);
     };
 
-    const searchAreaDiv = showSearchArea ? <>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <InputGroup size="sm">
-                <label htmlFor="searchName" className="form-label col-sm-3 px-1">{props.isRecipe ? 'Search Recipe' : 'Search Food'}</label>
-                <FormControl
-                    placeholder="Search"
-                    aria-label=""
-                    id="searchName"
-                    onChange={handleInputChange}
-                    />
-                </InputGroup>
-            </div>
-            <button type="submit">Search</button>
-        </form>
-        <Container>
-            {foodSearchDivs}
-            {recipeSearchDivs}
-        </Container>
+    const searchAreaDiv = showSearchArea ? 
+        <>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <InputGroup size="sm">
+                    <label htmlFor="searchName" className="form-label col-sm-3 px-1">{props.isRecipe ? 'Search Recipe' : 'Search Food'}</label>
+                    <FormControl
+                        placeholder="Search"
+                        aria-label=""
+                        id="searchName"
+                        onChange={handleInputChange}
+                        />
+                    </InputGroup>
+                </div>
+                <button type="submit">Search</button>
+            </form>
+            <Container>
+                {foodSearchDivs}
+                {recipeSearchDivs}
+            </Container>
     </> : null;
     
     const foodRecipeFull = showSearchArea ? null : <FoodRecipeFullResult item={itemGetResult} chosenItem = {item => selectItemHandler(item)} cancelHandler={cancelItemHandler}/>;
